@@ -1,0 +1,377 @@
+[
+  {
+    "building_name": "Laurel",
+    "address": "506 Primero Grove Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "Magnolia",
+    "address": "512 Primero Grove Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "Manzanita",
+    "address": "518 Primero Grove Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "Spruce",
+    "address": "500 Primero Grove Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "184 Horizon Street",
+    "address": "184 Horizon Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "187 Mint Street",
+    "address": "187 Mint Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "2079 Tilia Street",
+    "address": "2079 Tilia Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "2231 Jade Street",
+    "address": "2231 Jade Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "298 Celadon Street",
+    "address": "298 Celadon Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "298 Citron Street",
+    "address": "298 Citron Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "298 Horizon Street",
+    "address": "298 Horizon Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "301 Celadon Street",
+    "address": "301 Celadon Street, Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 0,
+    "electricity": null,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "Shasta Hall",
+    "address": "565 Oxford Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 1,
+    "electricity": 468832.409,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "Tahoe Hall",
+    "address": "533 Oxford Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 1,
+    "electricity": 468832.409,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  },
+  {
+    "building_name": "Yosemite Hall",
+    "address": "541 Oxford Cr., Davis, CA",
+    "fire_safety": {
+      "sprinkler": {
+        "full": true,
+        "partial": false
+      },
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {
+        "corridor": true,
+        "room": true
+      }
+    },
+    "num_fire_drills": 1,
+    "electricity": 468832.409,
+    "steam": null,
+    "chilled_water": null,
+    "domestic_water": null
+  }
+]
