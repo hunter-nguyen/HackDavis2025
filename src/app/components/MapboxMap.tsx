@@ -5,6 +5,21 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { getDormData } from '@/server/actions';
 import { UCDDormData } from '@/lib/types';
+import CompositeScore from "./CompositeScore";
+
+// Define the BuildingData interface to match what CompositeScore expects
+interface BuildingData {
+  name: string;
+  fireIncidents: number;
+  hasAlarm: boolean;
+  hasSprinkler: boolean;
+  energyIntensity: number;
+  waterStrain: number;
+  gasStrain: number;
+  buildingAge: number;
+  buildingType: string;
+  demographics: string;
+}
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
@@ -25,6 +40,7 @@ export default function MapboxMap({
   const [dormData, setDormData] = useState<UCDDormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedDorm, setSelectedDorm] = useState<BuildingData | null>(null);
 
   // Initialize map
   useEffect(() => {
@@ -127,10 +143,37 @@ export default function MapboxMap({
           </div>
         `;
 
-        const marker = new mapboxgl.Marker({
-          color: "#4B9CD3", // UC Davis blue
-          scale: 0.8 // Slightly smaller marker
-        })
+        // Create marker element
+        const el = document.createElement("div");
+        el.className = "mapbox-marker";
+        el.style.width = "24px";
+        el.style.height = "24px";
+        el.style.background = "#4B9CD3"; // UC Davis blue
+        el.style.borderRadius = "50%";
+        el.style.border = "2px solid white";
+        el.style.cursor = "pointer";
+        
+        // Add click event to show fire resilience score
+        el.addEventListener("click", () => {
+          // Create building data object for the CompositeScore component
+          const buildingData: BuildingData = {
+            name: dorm.building_name,
+            fireIncidents: dorm.num_fire_drills || 0, // Using fire drills as a proxy for incidents
+            hasAlarm: dorm.fire_safety?.alarm?.smoke || false,
+            hasSprinkler: dorm.fire_safety?.sprinkler?.full || dorm.fire_safety?.sprinkler?.partial || false,
+            energyIntensity: dorm.electricity || 100,
+            waterStrain: dorm.domestic_water || 50,
+            gasStrain: dorm.steam || 30,
+            buildingAge: 40, // Default age since it's not in the data
+            buildingType: "residential",
+            demographics: "15% elderly, 25% low-income, 10% disabled"
+          };
+          
+          setSelectedDorm(buildingData);
+        });
+        
+        // Add the marker to the map
+        new mapboxgl.Marker(el)
           .setLngLat([dorm.longitude, dorm.latitude])
           .setPopup(
             new mapboxgl.Popup({
@@ -177,37 +220,60 @@ export default function MapboxMap({
   }
 
   return (
-    <div className="fixed inset-0 w-full h-full">
-      <div
-        ref={mapContainer}
-        className="w-full h-full"
-        style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0
-        }}
-      />
-      <style jsx global>{`
-        .mapboxgl-popup-content {
-          padding: 0;
-          border-radius: 8px;
-          overflow: hidden;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .mapboxgl-popup-close-button {
-          padding: 4px 8px;
-          color: #4B5563;
-          font-size: 16px;
-          right: 4px;
-          top: 4px;
-        }
-        .mapboxgl-popup-close-button:hover {
-          background-color: #F3F4F6;
-          border-radius: 4px;
-        }
-      `}</style>
-    </div>
+    <>
+      <div className="fixed inset-0 w-full h-full">
+        <div
+          ref={mapContainer}
+          className="w-full h-full"
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }}
+        />
+        <style jsx global>{`
+          .mapboxgl-popup-content {
+            padding: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          }
+          .mapboxgl-popup-close-button {
+            padding: 4px 8px;
+            color: #4B5563;
+            font-size: 16px;
+            right: 4px;
+            top: 4px;
+          }
+          .mapboxgl-popup-close-button:hover {
+            background-color: #F3F4F6;
+            border-radius: 4px;
+          }
+        `}</style>
+      </div>
+      
+      {/* Fire Resilience Score Modal */}
+      {selectedDorm && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+          onClick={() => setSelectedDorm(null)}
+        >
+          <div onClick={e => e.stopPropagation()} className="max-w-2xl w-full">
+            <CompositeScore building={selectedDorm} />
+            <div className="text-center mt-4">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-gray-800 font-medium"
+                onClick={() => setSelectedDorm(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
