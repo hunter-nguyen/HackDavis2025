@@ -31,7 +31,7 @@ interface MapboxMapProps {
 }
 
 export default function MapboxMap({
-  style = "mapbox://styles/mapbox/outdoors-v12", // Changed to default streets theme
+  style = "mapbox://styles/mapbox/standard", // Changed style for 3D buildings
   center = [-121.7520, 38.5382],
   zoom = 14, // Increased zoom level for better initial view
 }: MapboxMapProps) {
@@ -67,7 +67,71 @@ export default function MapboxMap({
       map.current.addControl(new mapboxgl.FullscreenControl(), "top-right");
 
       // Add scale control
-      map.current.addControl(new mapboxgl.ScaleControl(), "bottom-right");
+      map.current.addControl(new mapboxgl.ScaleControl());
+
+      // Handle map load: Set pitch and add 3D buildings
+      map.current.on('load', () => {
+        if (!map.current) return;
+        map.current.setPitch(45); // Set initial pitch for 3D view
+
+        // Ensure the composite source is loaded before adding the layer
+        if (map.current.getSource('composite')) {
+            // Check if the layer already exists before adding
+            if (!map.current.getLayer('3d-buildings')) {
+                map.current.addLayer({
+                    'id': '3d-buildings',
+                    'source': 'composite',
+                    'source-layer': 'building',
+                    'filter': ['==', 'extrude', 'true'],
+                    'type': 'fill-extrusion',
+                    'minzoom': 15,
+                    'paint': {
+                      'fill-extrusion-color': '#aaa',
+                      'fill-extrusion-height': [
+                        "interpolate", ["linear"], ["get", "height"],
+                        0, 0,
+                        100, 100 // Max building height
+                      ],
+                      'fill-extrusion-base': [
+                        "interpolate", ["linear"], ["get", "min_height"],
+                        0, 0,
+                        30, 30 // Min building height
+                      ],
+                      'fill-extrusion-opacity': 0.6
+                    }
+                });
+            }
+        } else {
+            // If the source isn't ready yet, wait for it using 'sourcedata' event
+            map.current.once('sourcedata', (e) => {
+                 // Check if the event is for the composite source and it's loaded
+                 // Also ensure map.current still exists and layer isn't added yet
+                 if (e.isSourceLoaded && e.sourceId === 'composite' && map.current && !map.current.getLayer('3d-buildings')) {
+                    map.current.addLayer({
+                        'id': '3d-buildings',
+                        'source': 'composite',
+                        'source-layer': 'building',
+                        'filter': ['==', 'extrude', 'true'],
+                        'type': 'fill-extrusion',
+                        'minzoom': 15,
+                        'paint': {
+                            'fill-extrusion-color': '#aaa',
+                            'fill-extrusion-height': [
+                                "interpolate", ["linear"], ["get", "height"],
+                                0, 0, 100, 100
+                            ],
+                            'fill-extrusion-base': [
+                                "interpolate", ["linear"], ["get", "min_height"],
+                                0, 0, 30, 30
+                            ],
+                            'fill-extrusion-opacity': 0.6
+                        }
+                    });
+                 }
+            });
+            console.warn("Composite source not immediately available on 'load'. Waiting for 'sourcedata'.");
+        }
+      });
 
       // Handle map load errors
       map.current.on('error', (e) => {
@@ -153,37 +217,35 @@ export default function MapboxMap({
         el.style.border = "2px solid white";
         el.style.cursor = "pointer";
         
-        // Add click event to show fire resilience score
-        el.addEventListener("click", () => {
-          // Create building data object for the CompositeScore component
+        // Create the popup instance first
+        const popup = new mapboxgl.Popup({
+          offset: 25,
+          maxWidth: "300px",
+          className: "custom-popup"
+        }).setHTML(popupContent);
+
+        // Set the selected dorm when the popup opens
+        popup.on('open', () => {
           const buildingData: BuildingData = {
             name: dorm.building_name,
-            fireIncidents: dorm.num_fire_drills || 0, // Using fire drills as a proxy for incidents
+            fireIncidents: dorm.num_fire_drills || 0,
             hasAlarm: dorm.fire_safety?.alarm?.smoke || false,
             hasSprinkler: dorm.fire_safety?.sprinkler?.full || dorm.fire_safety?.sprinkler?.partial || false,
             energyIntensity: dorm.electricity || 100,
             waterStrain: dorm.domestic_water || 50,
             gasStrain: dorm.steam || 30,
-            buildingAge: 40, // Default age since it's not in the data
+            buildingAge: 40, // Default age
             buildingType: "residential",
             demographics: "15% elderly, 25% low-income, 10% disabled"
           };
-          
           setSelectedDorm(buildingData);
         });
         
-        // Add the marker to the map
+        // Add the marker to the map and attach the popup
         new mapboxgl.Marker(el)
           .setLngLat([dorm.longitude, dorm.latitude])
-          .setPopup(
-            new mapboxgl.Popup({
-              offset: 25,
-              maxWidth: "300px",
-              className: "custom-popup"
-            })
-            .setHTML(popupContent)
-          )
-          .addTo(map.current!);
+          .setPopup(popup) // Attach the configured popup
+          .addTo(map.current!); 
       }
     });
   }, [dormData]);
