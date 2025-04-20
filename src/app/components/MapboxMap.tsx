@@ -16,9 +16,9 @@ interface MapboxMapProps {
 }
 
 export default function MapboxMap({
-  style = "mapbox://styles/mapbox/standard", // Changed style for 3D buildings
+  style = "mapbox://styles/mapbox/standard",
   center = [-121.752, 38.5382],
-  zoom = 14, // Increased zoom level for better initial view
+  zoom = 14,
 }: MapboxMapProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
@@ -189,54 +189,30 @@ export default function MapboxMap({
     const mapInstance = map.current;
     if (!mapInstance || !dormData) return;
 
-    // Clear existing markers
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
 
-    const initialZoom = mapInstance.getZoom(); // Get initial zoom for later
+    const initialZoom = mapInstance.getZoom();
 
     dormData.forEach((dorm) => {
       if (dorm.latitude && dorm.longitude) {
         const dormLngLat: [number, number] = [dorm.longitude, dorm.latitude];
 
         // --- Determine Marker Color ---
-        // Provide default score 0 if undefined
         const scoreNum = dorm.fire_risk_score ?? 0;
-        const markerColor = getColorForScore(scoreNum); // Use helper function
-
-        // Create a custom marker element
-        const el = document.createElement("div");
-        el.className = "custom-dorm-marker";
-        // Apply color based on score
-        el.style.backgroundColor = markerColor;
-        el.style.width = '20px'; // Ensure size is defined
-        el.style.height = '20px'; // Ensure size is defined
-        el.style.borderRadius = '50%';
-        el.style.border = '2px solid white'; // Add border for visibility
-        el.style.cursor = 'pointer'; // Add cursor pointer for better UX
-
-        // --- Add click listener to marker element for flyTo animation ---
-        el.addEventListener("click", () => {
-          mapInstance?.flyTo({
-            center: dormLngLat,
-            zoom: 16.5, // Adjust desired zoom level on click
-            pitch: 50, // Optional: Adjust pitch slightly more
-            speed: 0.8, // Adjust speed
-            curve: 1.4, // Adjust curve factor
-            essential: true, // Ensures animation completes
-          });
-        });
-        // --- End of added click listener ---
+        const markerColor = getColorForScore(scoreNum);
 
         // --- Create Popup Content ---
-        // Directly include score and action steps
-        // Use optional chaining and nullish coalescing for safety
-        const scoreDisplay = dorm.fire_risk_score !== undefined ? `<strong>Fire Risk Score:</strong> ${dorm.fire_risk_score}/100` : 'Score not available.';
-        // Format action steps - split by newline and create list items
+        const scoreDisplay =
+          dorm.fire_risk_score !== undefined
+            ? `<strong>Fire Risk Score:</strong> ${dorm.fire_risk_score}/100`
+            : "Score not available.";
         const stepsHtml = dorm.action_steps
-          ? `<strong>Action Steps:</strong><ul>${dorm.action_steps.split('\n').map(step => `<li>${step.trim()}</li>`).join('')}</ul>`
-          : 'Action steps not available.';
-
+          ? `<strong>Action Steps:</strong><ul>${dorm.action_steps
+              .split("\n")
+              .map((step) => `<li>${step.trim()}</li>`)
+              .join("")}</ul>`
+          : "Action steps not available.";
         const popupContent = `
           <div class="p-2">
             <h3 class="text-lg font-semibold mb-1">${dorm.building_name}</h3>
@@ -247,38 +223,50 @@ export default function MapboxMap({
             <div class="text-sm">
               ${stepsHtml}
             </div>
-            <!-- Removed button and score container -->
           </div>
         `;
 
-        // Create the popup instance
         const popup = new mapboxgl.Popup({
           offset: 25,
           maxWidth: "320px",
           className: "custom-dorm-popup",
         }).setHTML(popupContent);
 
-        // Create the marker with the colored element
-        const marker = new mapboxgl.Marker(el)
+        // --- Create standard marker with color option ---
+        const marker = new mapboxgl.Marker({
+          color: markerColor, // Set color directly
+        })
           .setLngLat(dormLngLat)
           .setPopup(popup);
 
-        // Add listener for when the popup opens - ONLY for zoom/close logic now
+        // --- Add click listener to the marker's default element ---
+        const markerElement = marker.getElement();
+        markerElement.style.cursor = "pointer"; // Add cursor pointer
+        markerElement.addEventListener("click", () => {
+          mapInstance?.flyTo({
+            center: dormLngLat,
+            zoom: 16.5,
+            pitch: 50,
+            speed: 0.8,
+            curve: 1.4,
+            essential: true,
+          });
+        });
+        // --- End of added click listener ---
+
+        // Popup open/close listeners remain the same
         popup.on("open", () => {
-          // Keep the close listener for zoom adjustment.
           setTimeout(() => {
-            // Add listener for when THIS popup closes (zoom out)
             popup.once("close", () => {
               mapInstance?.easeTo({
-                zoom: initialZoom + 1, // Zoom out slightly
-                pitch: 45, // Reset pitch
+                zoom: initialZoom,
+                pitch: 45,
                 duration: 500,
               });
             });
           }, 0);
         });
 
-        // Add the marker to the map
         marker.addTo(mapInstance);
         markersRef.current.push(marker);
       }
@@ -286,20 +274,16 @@ export default function MapboxMap({
 
     // Cleanup markers
     return () => {
-      // console.log("Cleaning up markers..."); // Keep if useful
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
     };
-  // Ensure dependencies are correct - add getColorForScore if it's defined outside and used
-  }, [dormData, map, zoom]); // Assuming getColorForScore is stable or defined inside/outside scope appropriately
+  }, [dormData, map.current, zoom]);
 
   // Helper function to determine marker color based on score
   const getColorForScore = (score: number): string => {
     if (score >= 90) return "#FF0000"; // Red
-    if (score >= 80) return "#FF4500"; // OrangeRed
-    if (score >= 70) return "#FFA500"; // Orange
-    if (score >= 60) return "#FFD700"; // Gold
-    return "#90EE90"; // LightGreen (for scores below 60)
+    if (score >= 70) return "#EEA500"; // Orange
+    return "#006400"; // LightGreen
   };
 
   if (loading) {
