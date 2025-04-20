@@ -10,6 +10,13 @@ import { getScoreColor } from "@/lib/utils";
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = mapboxToken;
 
+const DEFAULT_MAP_VIEW = {
+    center: [-121.752, 38.5382] as [number, number],
+    zoom: 14,
+    pitch: 0, // Default flat view
+    bearing: 0, // Default north orientation
+  }
+
 export default function SimplifiedMap() {
   // DOM references
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -24,12 +31,7 @@ export default function SimplifiedMap() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Store original map view to restore when closing modal
-  const originalMapView = useRef({
-    center: [-121.752, 38.5382] as [number, number],
-    zoom: 14,
-    pitch: 0, // Default flat view
-    bearing: 0, // Default north orientation
-  });
+  const originalMapView = useRef(DEFAULT_MAP_VIEW);
 
   // Fetch dorm data
   useEffect(() => {
@@ -61,7 +63,6 @@ export default function SimplifiedMap() {
         style: "mapbox://styles/mapbox/standard",
         center: [-121.756, 38.54],
         zoom: 14.5,
-        pitch: 45, // Add initial tilt
       });
 
       map.current = newMap;
@@ -151,8 +152,8 @@ export default function SimplifiedMap() {
           // Zoom to marker location with smooth animation
           if (dorm.longitude !== undefined && dorm.latitude !== undefined) {
             currentMap.flyTo({
-              center: [dorm.longitude, dorm.latitude],
-              zoom: 16, // Closer zoom level
+              center: [dorm.longitude - 0.001, dorm.latitude],
+              zoom: 17, // Closer zoom level
               pitch: 45, // Tilt the view to show 3D buildings
               bearing: -20, // Slight rotation for better perspective
               speed: 1, // Animation speed
@@ -257,11 +258,8 @@ export default function SimplifiedMap() {
           // Zoom back out to original view
           if (map.current) {
             map.current.flyTo({
-              center: originalMapView.current.center,
-              zoom: originalMapView.current.zoom,
-              pitch: originalMapView.current.pitch, // Restore original pitch
-              bearing: originalMapView.current.bearing, // Restore original bearing
-              speed: 0.8, // Slightly slower for zoom out
+              ...DEFAULT_MAP_VIEW,
+              speed: 1,
               curve: 1,
               essential: true,
             });
