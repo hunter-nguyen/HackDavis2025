@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { DormData } from "@/lib/types";
 import { X, AlertTriangle, Shield, Flame, CheckCircle, XCircle, Building, Activity, Info, Play } from "lucide-react";
+import { getScoreColor } from "@/lib/utils";
 
 interface BuildingDataModalProps {
   building: DormData | null;
@@ -36,6 +37,8 @@ export default function BuildingDataModal({
   const [actionPlans, setActionPlans] = useState<ActionPlan[]>([]);
   const [isLoadingPlans, setIsLoadingPlans] = useState(false);
   const [isVisualizing, setIsVisualizing] = useState(false);
+
+  const color = getScoreColor(building?.fire_risk_score ?? 50);
 
   // Function to fetch action plans
   const fetchActionPlans = async () => {
@@ -220,7 +223,7 @@ export default function BuildingDataModal({
                       cy="50" 
                       r="40" 
                       fill="transparent"
-                      stroke="#EF4444"
+                      stroke={color}
                       strokeWidth="8"
                       strokeDasharray={`${safetyScore * 2.51} 251`} // 2.51 is approx 2*PI*40
                     />
@@ -228,7 +231,7 @@ export default function BuildingDataModal({
                   
                   {/* Score text */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold" style={{ color: "#EF4444" }}>
+                    <span className="text-2xl font-bold" style={{ color: color }}>
                       {safetyScore}
                     </span>
                     <span className="text-xs text-gray-500">Risk</span>
@@ -241,10 +244,10 @@ export default function BuildingDataModal({
                   <div className="mt-1 inline-flex items-center px-2.5 py-1 rounded-full text-sm" 
                     style={{ 
                       backgroundColor: 'rgba(239, 68, 68, 0.1)', 
-                      color: "#EF4444"
+                      color: color
                     }}>
                     <AlertTriangle className="h-3.5 w-3.5 mr-1.5" />
-                    High Risk
+                    {safetyScore >= 90 ? 'High Risk' : safetyScore >= 80 ? 'Medium Risk' : 'Low Risk'}
                   </div>
                   <div className="mt-1 text-xs text-gray-500">Last updated Apr 20, 2025</div>
                 </div>
