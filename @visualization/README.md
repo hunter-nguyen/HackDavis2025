@@ -41,5 +41,5 @@ The visualizations use a consistent color scheme that matches the FireZero appli
 - Red (#EF4444): High risk scores (>65)
 
 The data used for these visualizations comes from two main sources:
-1. The [UC Davis CEED dataset](https://github.com/ucdavis/ceed) (energy, water, and gas usage)
-2. The [UC Davis 2024 Clery Fire Safety Report](https://www.ucdavis.edu/clery/fire-safety-report) (fire safety metrics)
+1. The [UC Davis CEED dataset]([https://github.com/ucdavis/ceed](https://ceed.ucdavis.edu/)) (energy, water, and gas usage)
+2. The [UC Davis 2024 Clery Fire Safety Report](https://clery.ucdavis.edu/sites/g/files/dgvnsk1761/files/media/documents/ASFSR-UCD-2024vOct2024_0.pdf) (fire safety metrics)
