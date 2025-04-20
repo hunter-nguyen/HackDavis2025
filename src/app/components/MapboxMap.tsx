@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { getDormData } from "@/server/actions";
-import { UCDDormData } from "@/lib/types";
+import { DormData, UCDDormData } from "@/lib/types";
+import BuildingDataModal from "./BuildingDataModal";
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
@@ -26,6 +27,10 @@ export default function MapboxMap({
   const [dormData, setDormData] = useState<UCDDormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // State for the modal
+  const [selectedBuilding, setSelectedBuilding] = useState<DormData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Initialize map
   useEffect(() => {
@@ -162,7 +167,7 @@ export default function MapboxMap({
       console.error("Map initialization error:", err);
       setError(err instanceof Error ? err.message : "Failed to initialize map");
     }
-  }, [style, center, zoom]);
+  }, [style, center, zoom]); // Restore the proper dependency array
 
   // Fetch dorm data
   useEffect(() => {
@@ -184,16 +189,28 @@ export default function MapboxMap({
     fetchData();
   }, []);
 
+  // Adjust map padding when modal is opened/closed
+  useEffect(() => {
+    if (!map.current) return;
+    
+    // Add padding to the left side when modal is open
+    if (isModalOpen) {
+      map.current.setPadding({ left: 400, top: 0, right: 0, bottom: 0 });
+    } else {
+      map.current.setPadding({ left: 0, top: 0, right: 0, bottom: 0 });
+    }
+  }, [isModalOpen]);
+
   // Add markers for dorms
   useEffect(() => {
     const mapInstance = map.current;
     if (!mapInstance || !dormData) return;
 
+    // Clear any existing markers
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
 
-    const initialZoom = mapInstance.getZoom();
-
+    // Add markers for each dorm
     dormData.forEach((dorm) => {
       if (dorm.latitude && dorm.longitude) {
         const dormLngLat: [number, number] = [dorm.longitude, dorm.latitude];
@@ -202,88 +219,39 @@ export default function MapboxMap({
         const scoreNum = dorm.fire_risk_score ?? 0;
         const markerColor = getColorForScore(scoreNum);
 
-        // --- Create Popup Content ---
-        const scoreDisplay =
-          dorm.fire_risk_score !== undefined
-            ? `<strong>Fire Risk Score:</strong> ${dorm.fire_risk_score}/100`
-            : "Score not available.";
-        const stepsHtml = dorm.action_steps
-          ? `<strong>Action Steps:</strong><ul>${dorm.action_steps
-              .split("\n")
-              .map((step) => `<li>${step.trim()}</li>`)
-              .join("")}</ul>`
-          : "Action steps not available.";
-        const popupContent = `
-          <div class="p-2">
-            <h3 class="text-lg font-semibold mb-1">${dorm.building_name}</h3>
-            <p class="text-sm text-gray-600 mb-2">${dorm.address}</p>
-            <div class="text-sm mb-2">
-              ${scoreDisplay}
-            </div>
-            <div class="text-sm">
-              ${stepsHtml}
-            </div>
-          </div>
-        `;
-
-        const popup = new mapboxgl.Popup({
-          offset: 25,
-          maxWidth: "320px",
-          className: "custom-dorm-popup",
-        }).setHTML(popupContent);
-
         // --- Create standard marker with color option ---
         const marker = new mapboxgl.Marker({
           color: markerColor, // Set color directly
-        })
-          .setLngLat(dormLngLat)
-          .setPopup(popup);
+        }).setLngLat(dormLngLat);
 
         // --- Add click listener to the marker's default element ---
         const markerElement = marker.getElement();
         markerElement.style.cursor = "pointer"; // Add cursor pointer
+        
+        // Simple click handler that only opens the modal without changing the map
         markerElement.addEventListener("click", () => {
-          mapInstance?.flyTo({
-            center: dormLngLat,
-            zoom: 16.5,
-            pitch: 50,
-            speed: 0.8,
-            curve: 1.4,
-            essential: true,
-          });
-        });
-        // --- End of added click listener ---
-
-        // Popup open/close listeners remain the same
-        popup.on("open", () => {
-          setTimeout(() => {
-            popup.once("close", () => {
-              mapInstance?.easeTo({
-                zoom: initialZoom,
-                pitch: 45,
-                duration: 500,
-              });
-            });
-          }, 0);
+          // Simply open the modal with the selected building data
+          // No map movement or camera changes at all
+          setSelectedBuilding(dorm);
+          setIsModalOpen(true);
         });
 
         marker.addTo(mapInstance);
         markersRef.current.push(marker);
       }
     });
-
-    // Cleanup markers
-    return () => {
-      markersRef.current.forEach((marker) => marker.remove());
-      markersRef.current = [];
-    };
-  }, [dormData, map.current, zoom]);
+  }, [dormData]); // Only re-run if dormData changes
 
   // Helper function to determine marker color based on score
   const getColorForScore = (score: number): string => {
     if (score >= 90) return "#FF0000"; // Red
     if (score >= 70) return "#EEA500"; // Orange
     return "#006400"; // LightGreen
+  };
+
+  // Handler for closing the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   if (loading) {
@@ -319,7 +287,7 @@ export default function MapboxMap({
 
   return (
     <>
-      <div className="fixed inset-0 w-full h-full">
+      <div className={`fixed inset-0 w-full h-full transition-all duration-300 ${isModalOpen ? 'pl-[400px]' : 'pl-0'}`}>
         <div
           ref={mapContainer}
           className="w-full h-full"
@@ -331,30 +299,14 @@ export default function MapboxMap({
             right: 0,
           }}
         />
-        <style jsx global>{`
-          .mapboxgl-popup-content {
-            padding: 0; /* Remove default padding */
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-              0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          }
-          .custom-dorm-popup .mapboxgl-popup-content-custom {
-            /* Add specific styles for the custom content div if needed */
-            font-family: sans-serif;
-          }
-          .mapboxgl-popup-close-button {
-            padding: 4px 8px;
-            color: #4b5563;
-            font-size: 16px;
-            right: 4px;
-            top: 4px;
-          }
-          .mapboxgl-popup-close-button:hover {
-            background-color: #f3f4f6;
-            border-radius: 4px;
-          }
-        `}</style>
       </div>
+      
+      {/* Building Data Modal */}
+      <BuildingDataModal 
+        building={selectedBuilding}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </>
   );
 }
