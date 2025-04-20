@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DormData } from "@/lib/types";
 import { X, AlertTriangle, Shield, Flame, CheckCircle, XCircle, Building, Activity, Info } from "lucide-react";
 import { getScoreColor } from "@/lib/utils";
@@ -19,6 +19,60 @@ export default function BuildingDataModal({
   onClose,
 }: BuildingDataModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>('safety');
+  const [actionPlans, setActionPlans] = useState<Array<{ title: string; description: string }>>([]);
+  const [isLoadingPlans, setIsLoadingPlans] = useState(false);
+
+  // Function to fetch action plans
+  const fetchActionPlans = async () => {
+    if (!building) return;
+    
+    setIsLoadingPlans(true);
+    try {
+      // Compile building information
+      const buildingInfo = `
+        Building: ${building.building_name}
+        Address: ${building.address}
+        Fire Risk Score: ${building.fire_risk_score}
+        Safety Features: 
+        - Sprinkler System: ${building.fire_safety.sprinkler.full ? "Full" : building.fire_safety.sprinkler.partial ? "Partial" : "None"}
+        - Smoke Alarms: ${building.fire_safety.alarm.smoke ? "Present" : "Missing"}
+        - Manual Pull Stations: ${building.fire_safety.alarm.manual_pull ? "Present" : "Missing"}
+        - Evacuation Devices: ${building.fire_safety.alarm.evac_device ? "Present" : "Missing"}
+        Annual Fire Drills: ${building.num_fire_drills}
+        Utility Usage:
+        ${building.electricity !== null ? `- Electricity: ${building.electricity} kWh` : ''}
+        ${building.steam !== null ? `- Steam: ${building.steam} MMBtu` : ''}
+        ${building.chilled_water !== null ? `- Chilled Water: ${building.chilled_water} MMBtu` : ''}
+        ${building.domestic_water !== null ? `- Water: ${building.domestic_water} kgal` : ''}
+      `.trim();
+
+      const response = await fetch('/api/actionPlan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ buildingInfo }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch action plans');
+      }
+
+      const data = await response.json();
+      setActionPlans(data);
+    } catch (error) {
+      console.error('Error fetching action plans:', error);
+    } finally {
+      setIsLoadingPlans(false);
+    }
+  };
+
+  // Fetch action plans when switching to action tab
+  useEffect(() => {
+    if (activeTab === 'action' && building) {
+      fetchActionPlans();
+    }
+  }, [activeTab, building]);
 
   if (!isOpen || !building) return null;
 
@@ -63,14 +117,20 @@ export default function BuildingDataModal({
       className={`fixed left-0 top-0 bottom-0 w-[400px] bg-white shadow-xl z-40 flex flex-col transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
       style={{ borderTopRightRadius: '20px', borderBottomRightRadius: '20px' }}
     >
-      {/* Close button */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-gray-100 transition-colors z-10"
-        aria-label="Close"
-      >
-        <X className="h-5 w-5 text-gray-500" />
-      </button>
+      {/* Header section with close button */}
+      <div className="flex items-start justify-between px-4 py-3 border-b border-gray-200">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900">{building.building_name}</h2>
+          <p className="text-sm text-gray-600">{building.address}</p>
+        </div>
+        <button
+          onClick={onClose}
+          className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+          aria-label="Close"
+        >
+          <X className="h-5 w-5 text-gray-500" />
+        </button>
+      </div>
 
       {/* Tab Navigation */}
       <div className="flex border-b border-gray-200">
@@ -95,12 +155,6 @@ export default function BuildingDataModal({
           <AlertTriangle className="inline-block w-4 h-4 mr-1.5 -mt-0.5" />
           Action Plan
         </button>
-      </div>
-
-      {/* Building info */}
-      <div className="px-4 py-3 border-b border-gray-200">
-        <h2 className="text-lg font-bold text-gray-900">{building.building_name}</h2>
-        <p className="text-sm text-gray-600">{building.address}</p>
       </div>
 
       {/* Tab content */}
@@ -263,20 +317,30 @@ export default function BuildingDataModal({
               Recommended Actions
             </h3>
 
-            {actionSteps.length > 0 ? (
+            {isLoadingPlans ? (
+              <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-gray-300 border-t-red-500"></div>
+                  <p className="text-gray-500">Generating action plans...</p>
+                </div>
+              </div>
+            ) : actionPlans.length > 0 ? (
               <div className="space-y-3">
-                {actionSteps.map((step, index) => (
-                  <div key={index} className="flex bg-white p-3 rounded-xl shadow-sm border border-gray-200">
-                    <div className="flex-shrink-0 h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-0.5">
+                {actionPlans.map((plan, index) => (
+                  <div key={index} className="flex bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+                    <div className="flex-shrink-0 h-5 w-5 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-1">
                       <span className="text-xs font-medium text-red-600">{index + 1}</span>
                     </div>
-                    <p className="text-sm text-gray-700">{step.replace(/^-\s*/, '')}</p>
+                    <div>
+                      <h4 className="text-sm font-medium text-gray-900 mb-1">{plan.title}</h4>
+                      <p className="text-sm text-gray-600">{plan.description}</p>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 text-center">
-                <p className="text-gray-500">No action steps available</p>
+                <p className="text-gray-500">No action plans available</p>
               </div>
             )}
 
