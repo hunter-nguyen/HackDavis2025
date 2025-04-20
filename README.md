@@ -1,10 +1,9 @@
-# 🔥 FireZero 🔥
+# FireZero 🔥
 
 [![Next.js](https://img.shields.io/badge/Built%20with-Next.js-000?logo=nextdotjs&logoColor=white)](https://nextjs.org/)  
 [![TypeScript](https://img.shields.io/badge/Code-TypeScript-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)  
 [![Tailwind CSS](https://img.shields.io/badge/Styled%20with-Tailwind_CSS-38B2AC?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)  
 [![HackDavis](https://img.shields.io/badge/Hackathon-HackDavis_2025-blueviolet)](https://hackdavis.io/)  
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 ## 📊 Running the Visualization
