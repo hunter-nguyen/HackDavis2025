@@ -11,10 +11,14 @@ import { getScoreColor } from "@/lib/utils";
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = mapboxToken;
 
+const DEFAULT_MAP_CENTER = [-121.764, 38.5392] satisfies [number, number];
+
 const DEFAULT_MAP_VIEW = {
-  longitude: -121.7516,
-  latitude: 38.5382,
-  zoom: 15
+  longitude: DEFAULT_MAP_CENTER[0],
+  latitude: DEFAULT_MAP_CENTER[1],
+  zoom: 14.5,
+  pitch: 0,
+  bearing: 0,
 };
 
 export default function SimplifiedMap() {
@@ -66,7 +70,7 @@ export default function SimplifiedMap() {
       const newMap = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/standard",
-        center: [-121.764, 38.54],
+        center: DEFAULT_MAP_CENTER,
         zoom: 14.5,
       });
 
@@ -78,8 +82,8 @@ export default function SimplifiedMap() {
 
         // Store initial map view for restoration when modal closes
         originalMapView.current = {
-          longitude: -121.7516,
-          latitude: 38.5382,
+          longitude: DEFAULT_MAP_CENTER[0],
+          latitude: DEFAULT_MAP_CENTER[1],
           zoom: newMap.getZoom(),
         };
       });
@@ -179,8 +183,8 @@ export default function SimplifiedMap() {
               zoom: 17, // Closer zoom level
               pitch: 45, // Tilt the view to show 3D buildings
               bearing: -20, // Slight rotation for better perspective
-              speed: 1, // Animation speed
-              curve: 1, // Animation curve
+              speed: 1.5, // Animation speed
+              curve: 1.5, // Animation curve
               essential: true, // This animation is essential for usability
             });
           }
@@ -449,9 +453,12 @@ export default function SimplifiedMap() {
           setSelectedDorm(null);
           if (map.current) {
             map.current.easeTo({
-              center: [originalMapView.current.longitude, originalMapView.current.latitude],
-              zoom: originalMapView.current.zoom,
-              duration: 1000,
+              center: DEFAULT_MAP_CENTER,
+              zoom: DEFAULT_MAP_VIEW.zoom,
+              pitch: 0,
+              curve: 1.5,
+              bearing: 0,
+              essential: true,
             });
           }
         }}

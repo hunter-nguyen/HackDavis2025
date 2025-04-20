@@ -178,7 +178,7 @@ export default function BuildingDataModal({
           <div className="p-4 space-y-4">
             {/* Fire Visualization Section */}
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center gap-2">
                 <div>
                   <h3 className="text-md font-medium text-gray-800 flex items-center">
                     <Flame className="w-4 h-4 mr-2 text-red-500" />
