@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { getFireRiskScore } from "../../../utils/gemini";
+import { getFireRiskScore } from "@/server/actions";
 
 interface BuildingData {
   fireIncidents: number;

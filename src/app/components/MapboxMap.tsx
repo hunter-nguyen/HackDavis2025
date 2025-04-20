@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { getDormData } from "@/server/actions";
+import { getDormData, getFireRiskScore } from "@/server/actions";
 import { UCDDormData } from "@/lib/types";
 import CompositeScore from "./CompositeScore";
 import {
@@ -33,6 +33,7 @@ interface BuildingData {
 // Extend HTMLButtonElement type for tracking listener
 interface HTMLButtonElementWithTracking extends HTMLButtonElement {
   _clickHandlerAttached?: boolean;
+  _markerInstance?: mapboxgl.Marker;
 }
 
 // Set the access token
@@ -218,6 +219,17 @@ export default function MapboxMap({
   useEffect(() => {
     if (!map.current || !dormData || dormData.length === 0) return;
 
+    const mapInstance = map.current;
+
+    // Helper function to determine marker color based on score
+    const getColorForScore = (score: number): string => {
+      if (score >= 90) return '#FF0000'; // Red
+      if (score >= 80) return '#FF4500'; // OrangeRed
+      if (score >= 70) return '#FFA500'; // Orange
+      if (score >= 60) return '#FFD700'; // Gold
+      return '#90EE90'; // LightGreen (for scores below 60)
+    };
+
     // Clear existing markers
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
@@ -225,6 +237,9 @@ export default function MapboxMap({
     dormData.forEach((dorm) => {
       // Generate a unique ID for the button based on dorm name or ID
       const buttonId = `show-score-${dorm.building_name
+        .replace(/\s+/g, "-")
+        .toLowerCase()}`;
+      const scoreContainerId = `fire-risk-score-${dorm.building_name
         .replace(/\s+/g, "-")
         .toLowerCase()}`;
 
@@ -279,6 +294,7 @@ export default function MapboxMap({
             
             <div class="mt-4 pt-3 border-t border-gray-200 text-center">
                 <button id="${buttonId}" class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">View Resilience Score</button>
+                <div id="${scoreContainerId}" class="mt-2 text-sm text-gray-700"></div>
             </div>
           </div>
         `;
@@ -300,50 +316,78 @@ export default function MapboxMap({
           className: "custom-dorm-popup", // Add specific class for styling
         }).setHTML(popupContent);
 
-        // Add listener for when popup opens to attach button click handler
-        popup.on("open", () => {
-          const button = document.getElementById(
-            buttonId
-          ) as HTMLButtonElementWithTracking | null;
-          if (button) {
-            // Prevent duplicate listeners if popup reopens
-            const clickHandler = () => {
-              // Construct BuildingData object when button is clicked
-              const buildingData: BuildingData = {
-                name: dorm.building_name,
-                // Use defaults or N/A for fields not directly available on dorm object
-                fireIncidents: dorm.num_fire_drills || 0,
-                hasAlarm: dorm.fire_safety?.alarm?.smoke || false,
-                hasSprinkler:
-                  dorm.fire_safety?.sprinkler?.full ||
-                  dorm.fire_safety?.sprinkler?.partial ||
-                  false,
-                energyIntensity: dorm.electricity || 100, // Example default
-                waterStrain: dorm.domestic_water || 50, // Example default
-                gasStrain: dorm.steam || 30, // Example default
-                buildingAge: 40, // Example default/placeholder
-                buildingType: "residential", // Example default/placeholder
-                demographics: "N/A", // Example default/placeholder
-              };
-              setSelectedDorm(buildingData);
-              // Remove listener after click to prevent memory leaks if needed, though reopening popup adds new listener
-              // button.removeEventListener('click', clickHandler);
-            };
-            // Check if listener already exists before adding (simple way)
-            if (!button._clickHandlerAttached) {
-              button.addEventListener("click", clickHandler);
-              button._clickHandlerAttached = true;
-            }
-          }
-        });
-
-        // Add the marker to the map and attach the popup
+        // Create the marker (BEFORE attaching the popup listener setup, 
+        // so 'marker' is defined in the scope the listener closes over)
         const marker = new mapboxgl.Marker(el)
           .setLngLat([dorm.longitude, dorm.latitude])
-          .setPopup(popup) // Attach the configured popup
-          .addTo(map.current!);
+          .setPopup(popup); 
 
-        markersRef.current.push(marker); // Keep track of markers
+        // Add listener for when the popup opens 
+        popup.on("open", () => {
+          // Timeout to ensure the DOM is ready
+          setTimeout(() => {
+            const button = document.getElementById(
+              buttonId
+            ) as HTMLButtonElementWithTracking | null;
+            const scoreContainer = document.getElementById(scoreContainerId);
+            
+            // Store the marker instance on the button element for later access
+            if (button) {
+              button._markerInstance = marker; 
+            }
+
+            if (button && scoreContainer && !button._clickHandlerAttached) {
+              button._clickHandlerAttached = true; // Mark as attached
+              button.addEventListener("click", async () => {
+                scoreContainer.innerHTML = "Loading score...";
+                // Retrieve the marker instance from the button
+                const markerToUpdate = button._markerInstance;
+
+                try {
+                  // Construct a prompt for the AI
+                  const prompt = `Calculate a fire risk score (0-100) for the building: ${dorm.building_name} at ${dorm.address}. Key details: 
+- Fire Sprinklers: ${dorm.fire_safety?.sprinkler?.full ? "Full" : dorm.fire_safety?.sprinkler?.partial ? "Partial" : "None"}
+- Smoke Alarms: ${dorm.fire_safety?.alarm?.smoke ? "Yes" : "No"}
+- Manual Pull Stations: ${dorm.fire_safety?.alarm?.manual_pull ? "Yes" : "No"}
+- Average Electricity Usage: ${dorm.electricity ?? 'N/A'} kWh
+- Average Steam Usage: ${dorm.steam ?? 'N/A'} lbs
+- Number of Fire Drills: ${dorm.num_fire_drills ?? 'N/A'}. 
+Provide only the numerical score.`;
+                  
+                  const score = await getFireRiskScore(prompt); // Pass the constructed prompt
+                  
+                  scoreContainer.innerHTML = `<strong>Fire Risk Score:</strong> ${score}`;
+                  
+                  // --- Update Marker Color --- 
+                  if (markerToUpdate) {
+                    const scoreNum = parseInt(score, 10);
+                    if (!isNaN(scoreNum)) {
+                      const color = getColorForScore(scoreNum);
+                      markerToUpdate.getElement().style.background = color;
+                    } else {
+                       console.warn(`Could not parse score "${score}" as number.`);
+                       // Optionally reset color to default if parsing fails
+                       // markerToUpdate.getElement().style.background = '#4B9CD3'; 
+                    }
+                  }
+                  // -------
+                  
+                } catch (err) {
+                  console.error("Failed to fetch fire risk score:", err);
+                  scoreContainer.innerHTML = "Error loading score.";
+                   // Optionally reset color to default on error
+                  // if (markerToUpdate) { 
+                  //   markerToUpdate.getElement().style.background = '#4B9CD3';
+                  // }
+                }
+              });
+            }
+          }, 0); // Execute immediately after the current call stack clears
+        });
+
+        // Add the marker to the map (popup is already associated)
+        marker.addTo(mapInstance);
+        markersRef.current.push(marker);
       }
     });
 
