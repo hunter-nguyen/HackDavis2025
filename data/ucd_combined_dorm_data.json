@@ -22,7 +22,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.738961,
+    "latitude": 38.543559,
+    "fire_risk_score": 20,
+    "action_steps": "- Implement a program of at least two fire drills per year.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly according to manufacturer's recommendations and local fire codes.\n- Review and update the building's fire safety plan, including evacuation procedures and emergency contact information."
   },
   {
     "building_name": "Magnolia",
@@ -47,7 +51,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -76.263924,
+    "latitude": 45.908736,
+    "fire_risk_score": 20,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
   },
   {
     "building_name": "Manzanita",
@@ -72,7 +80,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.738961,
+    "latitude": 38.543559,
+    "fire_risk_score": 90,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
   },
   {
     "building_name": "Spruce",
@@ -97,7 +109,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -76.263924,
+    "latitude": 45.908736,
+    "fire_risk_score": 20,
+    "action_steps": "- Implement a program of at least two fire drills per year.\n- Review and update the fire safety plan to ensure all evacuation routes are clearly marked and easily accessible.\n- Conduct regular inspections of all fire safety equipment to ensure it is functioning correctly."
   },
   {
     "building_name": "184 Horizon Street",
@@ -122,7 +138,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.77822,
+    "latitude": 38.540585,
+    "fire_risk_score": 20,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Inspect all fire safety equipment (sprinklers, alarms, etc.) to ensure functionality and report any issues immediately."
   },
   {
     "building_name": "187 Mint Street",
@@ -147,7 +167,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.777031,
+    "latitude": 38.540594,
+    "fire_risk_score": 90,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, including clear signage and escape routes.\n- Ensure all fire safety equipment is regularly inspected and maintained."
   },
   {
     "building_name": "2079 Tilia Street",
@@ -172,7 +196,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.774871,
+    "latitude": 38.54265,
+    "fire_risk_score": 85,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan to include procedures for different scenarios.\n- Ensure all fire safety equipment is regularly inspected and maintained."
   },
   {
     "building_name": "2231 Jade Street",
@@ -197,7 +225,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.777021,
+    "latitude": 38.54136,
+    "fire_risk_score": 90,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan, including evacuation procedures.\n- Ensure all fire safety equipment is regularly inspected and maintained."
   },
   {
     "building_name": "298 Celadon Street",
@@ -222,7 +254,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.772927,
+    "latitude": 38.54258,
+    "fire_risk_score": 90,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan, including evacuation procedures.\n- Ensure all fire safety equipment is regularly inspected and maintained."
   },
   {
     "building_name": "298 Citron Street",
@@ -247,7 +283,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.775682,
+    "latitude": 38.54263,
+    "fire_risk_score": 90,
+    "action_steps": "- Implement a mandatory fire drill program with a minimum of two drills per year.\n- Review and update the evacuation plan, ensuring all occupants are familiar with procedures.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly to ensure functionality."
   },
   {
     "building_name": "298 Horizon Street",
@@ -272,7 +312,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.778165,
+    "latitude": 38.542721,
+    "fire_risk_score": 80,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety procedures and evacuation plan.\n- Ensure all fire safety equipment is regularly inspected and maintained."
   },
   {
     "building_name": "301 Celadon Street",
@@ -297,7 +341,11 @@
     "electricity": null,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.77406,
+    "latitude": 38.542625,
+    "fire_risk_score": 80,
+    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, including training for residents and staff.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) to ensure functionality."
   },
   {
     "building_name": "Shasta Hall",
@@ -322,7 +370,11 @@
     "electricity": 468832.409,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -70.495322,
+    "latitude": 44.132065,
+    "fire_risk_score": 15,
+    "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure proper functionality.\n- Implement a fire safety education program for residents."
   },
   {
     "building_name": "Tahoe Hall",
@@ -347,7 +399,11 @@
     "electricity": 468832.409,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": -121.76402,
+    "latitude": 38.54688,
+    "fire_risk_score": 15,
+    "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure functionality.\n- Implement a fire safety education program for residents."
   },
   {
     "building_name": "Yosemite Hall",
@@ -372,6 +428,10 @@
     "electricity": 468832.409,
     "steam": null,
     "chilled_water": null,
-    "domestic_water": null
+    "domestic_water": null,
+    "longitude": 172.19356,
+    "latitude": -43.29781,
+    "fire_risk_score": 15,
+    "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Provide fire safety education and training to residents."
   }
 ]

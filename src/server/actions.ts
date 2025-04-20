@@ -52,69 +52,66 @@ function parseFireRiskResponse(responseText: string): { score: number | undefine
 }
 
 
-/**
- * Server action to read, geocode, calculate fire risk, and return the UC Davis dorm data
- * @returns Promise containing the enhanced dorm data
- */
 export async function getDormData(): Promise<UCDDormData> {
+  const dataFilePath = path.join(process.cwd(), 'data', 'ucd_combined_dorm_data.json');
+  let dorms: DormData[];
+
   try {
-    const dataFilePath = path.join(process.cwd(), 'data', 'ucd_combined_dorm_data.json');
     const fileContents = await fs.promises.readFile(dataFilePath, 'utf8');
-    const dorms: DormData[] = JSON.parse(fileContents);
-
-    const enhancedDorms = await Promise.all(
-      dorms.map(async (dorm) => {
-        let latitude: number | undefined = undefined;
-        let longitude: number | undefined = undefined;
-        let fire_risk_score: number | undefined = undefined;
-        let action_steps: string | undefined = undefined;
-
-        // 1. Geocode
-        try {
-          const response = await geocodingClient
-            .forwardGeocode({ query: dorm.address, limit: 1 })
-            .send();
-
-          if (response?.body?.features?.length > 0) {
-            [longitude, latitude] = response.body.features[0].center;
-          } else {
-            console.warn(`Geocoding failed for address: ${dorm.address}`);
-          }
-        } catch (geoError) {
-          console.error(`Error geocoding address ${dorm.address}:`, geoError);
-        }
-
-        // 2. Calculate Fire Risk Score & Steps
-        try {
-          const prompt = createFireRiskPrompt(dorm.fire_safety, dorm.num_fire_drills);
-          const riskResponse = await getFireRiskScore(prompt); // Use the existing function
-          const parsedData = parseFireRiskResponse(riskResponse);
-          fire_risk_score = parsedData.score;
-          action_steps = parsedData.steps;
-          if (!fire_risk_score || !action_steps) {
-             console.warn(`Failed to get/parse fire risk for ${dorm.building_name}`);
-          }
-        } catch (riskError) {
-           console.error(`Error getting fire risk for ${dorm.building_name}:`, riskError);
-        }
-
-
-        // Return the dorm object with all available data
-        return {
-          ...dorm,
-          latitude,
-          longitude,
-          fire_risk_score,
-          action_steps
-        };
-      })
-    );
-
-    return enhancedDorms;
+    dorms = JSON.parse(fileContents);
   } catch (error) {
-    console.error('Error processing dorm data:', error); // Updated error message
-    throw new Error('Failed to load, geocode, or process dorm data');
+    console.error('Failed to read dorm data file:', error);
+    throw new Error('Failed to read dorm data');
   }
+
+  for (let i = 0; i < dorms.length; i++) {
+    const dorm = dorms[i];
+
+    // Skip if fire risk is already calculated
+    if (dorm.fire_risk_score !== undefined && dorm.action_steps !== undefined) {
+      continue;
+    }
+
+    // 1. Geocode if needed
+    if (dorm.latitude === undefined || dorm.longitude === undefined) {
+      try {
+        const geo = await geocodingClient.forwardGeocode({ query: dorm.address, limit: 1 }).send();
+        if (geo?.body?.features?.length > 0) {
+          [dorm.longitude, dorm.latitude] = geo.body.features[0].center;
+        } else {
+          console.warn(`Geocoding failed for: ${dorm.address}`);
+        }
+      } catch (err) {
+        console.error(`Geocoding error for ${dorm.building_name}:`, err);
+      }
+    }
+
+    // 2. Call Gemini
+    try {
+      const prompt = createFireRiskPrompt(dorm.fire_safety, dorm.num_fire_drills);
+      const riskResponse = await getFireRiskScore(prompt);
+      const { score, steps } = parseFireRiskResponse(riskResponse);
+
+      if (score !== undefined && steps !== undefined) {
+        dorm.fire_risk_score = score;
+        dorm.action_steps = steps;
+
+        // Save after successful Gemini response
+        await fs.promises.writeFile(dataFilePath, JSON.stringify(dorms, null, 2), 'utf8');
+      } else {
+        console.warn(`Incomplete Gemini data for ${dorm.building_name}`);
+      }
+
+    } catch (err: any) {
+      if (err.message.includes('429')) {
+        console.warn(`Rate limited by Gemini, pausing before continuing...`);
+      } else {
+        console.error(`Gemini error for ${dorm.building_name}:`, err);
+      }
+    }
+  }
+
+  return dorms;
 }
 
 export async function getFireRiskScore(prompt: string): Promise<string> {
