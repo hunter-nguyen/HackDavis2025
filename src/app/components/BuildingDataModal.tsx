@@ -3,6 +3,7 @@
 import React from "react";
 import { DormData } from "@/lib/types";
 import { X, AlertTriangle, Shield, Flame, CheckCircle, XCircle } from "lucide-react";
+import { getScoreColor } from "@/lib/utils";
 
 interface BuildingDataModalProps {
   building: DormData | null;
@@ -19,16 +20,8 @@ export default function BuildingDataModal({
 
   // Calculate safety score percentage for the gauge
   const safetyScore = building.fire_risk_score !== undefined ? building.fire_risk_score : 50;
-  const safetyPercentage = 100 - safetyScore; // Invert so higher is safer
   
-  // Determine color based on safety score
-  const getScoreColor = (score: number) => {
-    if (score >= 70) return "#10B981"; // Green for safe
-    if (score >= 40) return "#F59E0B"; // Amber for medium risk
-    return "#EF4444"; // Red for high risk
-  };
-  
-  const scoreColor = getScoreColor(safetyPercentage);
+  const scoreColor = getScoreColor(safetyScore);
   
   // Format safety features for display
   const safetyFeatures = [
@@ -98,14 +91,14 @@ export default function BuildingDataModal({
                 fill="transparent"
                 stroke={scoreColor}
                 strokeWidth="8"
-                strokeDasharray={`${safetyPercentage * 2.51} 251`} // 2.51 is approx 2*PI*40
+                strokeDasharray={`${safetyScore * 2.51} 251`} // 2.51 is approx 2*PI*40
               />
             </svg>
             
             {/* Score text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-xl font-bold" style={{ color: scoreColor }}>
-                {safetyPercentage}
+                {safetyScore}
               </span>
               <span className="text-[10px] text-gray-500">Score</span>
             </div>
@@ -117,7 +110,7 @@ export default function BuildingDataModal({
             <div className="mt-1 inline-flex items-center px-2 py-1 rounded-full text-xs" 
               style={{ backgroundColor: `${scoreColor}20`, color: scoreColor }}>
               <AlertTriangle className="h-3 w-3 mr-1" />
-              {safetyPercentage >= 70 ? "Low Risk" : safetyPercentage >= 40 ? "Medium Risk" : "High Risk"}
+              {safetyScore >= 90 ? "High Risk" : safetyScore >= 40 ? "Medium Risk" : "Low Risk"}
             </div>
           </div>
         </div>

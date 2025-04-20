@@ -5,16 +5,10 @@ import mapboxgl from "mapbox-gl";
 import { DormData } from "@/lib/types";
 import BuildingDataModal from "./BuildingDataModal";
 import { getDormData } from "@/server/actions";
+import { getScoreColor } from "@/lib/utils";
 
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = mapboxToken;
-
-// Colors for different risk levels - matching BuildingDataModal
-const RISK_COLORS = {
-  HIGH: "#EF4444", // Red - High risk
-  MEDIUM: "#F59E0B", // Amber - Medium risk
-  LOW: "#10B981", // Green - Low risk
-};
 
 export default function SimplifiedMap() {
   // DOM references
@@ -130,16 +124,10 @@ export default function SimplifiedMap() {
 
       // Get color based on risk score - matching BuildingDataModal calculation
       const safetyScore = dorm.fire_risk_score ?? 50;
-      const safetyPercentage = 100 - safetyScore; // Invert so higher is safer (same as modal)
-
+      
       // Use the same color logic as BuildingDataModal
-      const markerColor =
-        safetyPercentage >= 70
-          ? RISK_COLORS.LOW
-          : safetyPercentage >= 40
-          ? RISK_COLORS.MEDIUM
-          : RISK_COLORS.HIGH;
-
+      const markerColor = getScoreColor(safetyScore);
+      
       // Create color-coded Mapbox marker
       const marker = new mapboxgl.Marker({
         color: markerColor,
