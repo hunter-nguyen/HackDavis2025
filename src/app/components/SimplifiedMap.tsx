@@ -9,12 +9,12 @@ import { getDormData } from "@/server/actions";
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || '';
 mapboxgl.accessToken = mapboxToken;
 
-// Function to determine marker color based on risk score
-function getMarkerColor(score: number): string {
-  if (score >= 90) return "#FF0000"; // High risk - Red
-  if (score >= 70) return "#EEA500"; // Medium risk - Amber
-  return "#006400"; // Low risk - Green
-}
+// Colors for different risk levels - matching BuildingDataModal
+const RISK_COLORS = {
+  HIGH: "#EF4444",    // Red - High risk
+  MEDIUM: "#F59E0B",  // Amber - Medium risk
+  LOW: "#10B981"      // Green - Low risk
+};
 
 export default function SimplifiedMap() {
   // DOM references
@@ -56,7 +56,7 @@ export default function SimplifiedMap() {
     try {
       const newMap = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v11",
+        style: "mapbox://styles/mapbox/standard",
         center: [-121.752, 38.5382],
         zoom: 14,
       });
@@ -111,27 +111,28 @@ export default function SimplifiedMap() {
         return;
       }
       
-      // Create marker element
-      const el = document.createElement("div");
-      el.style.width = "24px";
-      el.style.height = "24px";
-      el.style.backgroundColor = getMarkerColor(dorm.fire_risk_score || 0);
-      el.style.borderRadius = "50%";
-      el.style.border = "2px solid white";
-      el.style.boxShadow = "0 2px 4px rgba(0,0,0,0.3)";
-      el.style.cursor = "pointer";
+      // Get color based on risk score - matching BuildingDataModal calculation
+      const safetyScore = dorm.fire_risk_score ?? 50;
+      const safetyPercentage = 100 - safetyScore; // Invert so higher is safer (same as modal)
       
-      // Set click handler
-      el.addEventListener("click", () => {
+      // Use the same color logic as BuildingDataModal
+      const markerColor = safetyPercentage >= 70 ? RISK_COLORS.LOW : 
+                          safetyPercentage >= 40 ? RISK_COLORS.MEDIUM : 
+                          RISK_COLORS.HIGH;
+      
+      // Create color-coded Mapbox marker
+      const marker = new mapboxgl.Marker({
+        color: markerColor
+      })
+        .setLngLat([dorm.longitude, dorm.latitude])
+        .addTo(currentMap);
+        
+      // Add click handler
+      marker.getElement().addEventListener('click', () => {
         console.log("Marker clicked:", dorm.building_name);
         setSelectedDorm(dorm);
         setIsModalOpen(true);
       });
-      
-      // Create and add marker
-      const marker = new mapboxgl.Marker(el)
-        .setLngLat([dorm.longitude, dorm.latitude])
-        .addTo(currentMap);
       
       // Store marker reference
       markersRef.current.push(marker);

@@ -43,7 +43,7 @@ export default function MapboxMap({ dorms }: MapboxMapProps) {
       // Create the map with a try-catch to handle initialization errors
       map = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v11",
+        style: "mapbox://styles/mapbox/standard",
         center: [-121.752, 38.5382],
         zoom: 14,
         attributionControl: true,

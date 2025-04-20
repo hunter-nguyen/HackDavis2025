@@ -29,7 +29,7 @@ export default function LandingPage() {
     if (mapContainer.current) {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
-        style: "mapbox://styles/mapbox/streets-v12",
+        style: "mapbox://styles/mapbox/standard",
         center: [UCDAVIS_COORDINATES.lng, UCDAVIS_COORDINATES.lat],
         zoom: UCDAVIS_COORDINATES.zoom,
         attributionControl: false,
