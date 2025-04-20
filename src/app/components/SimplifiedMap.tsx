@@ -13,7 +13,7 @@ mapboxgl.accessToken = mapboxToken;
 const DEFAULT_MAP_CENTER = [-121.762, 38.5382] satisfies [number, number];
 
 const DEFAULT_MAP_VIEW = {
-  center: [-121.752, 38.5382] as [number, number],
+  center: DEFAULT_MAP_CENTER,
   zoom: 14,
   pitch: 0, // Default flat view
   bearing: 0, // Default north orientation
@@ -63,7 +63,7 @@ export default function SimplifiedMap() {
       const newMap = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/standard",
-        center: [-121.764, 38.54],
+        center: DEFAULT_MAP_CENTER,
         zoom: 14.5,
       });
 
