@@ -28,6 +28,14 @@ export default function SimplifiedMap() {
   const [dorms, setDorms] = useState<DormData[]>([]);
   const [selectedDorm, setSelectedDorm] = useState<DormData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Store original map view to restore when closing modal
+  const originalMapView = useRef({
+    center: [-121.752, 38.5382] as [number, number],
+    zoom: 14,
+    pitch: 0,  // Default flat view
+    bearing: 0  // Default north orientation
+  });
 
   // Fetch dorm data
   useEffect(() => {
@@ -66,6 +74,14 @@ export default function SimplifiedMap() {
       newMap.on('load', () => {
         console.log("Map loaded successfully");
         setLoading(false);
+        
+        // Store initial map view for restoration when modal closes
+        originalMapView.current = {
+          center: [-121.752, 38.5382],
+          zoom: newMap.getZoom(),
+          pitch: newMap.getPitch(),
+          bearing: newMap.getBearing()
+        };
       });
       
       newMap.on('error', (e) => {
@@ -127,9 +143,34 @@ export default function SimplifiedMap() {
         .setLngLat([dorm.longitude, dorm.latitude])
         .addTo(currentMap);
         
-      // Add click handler
+      // Add click handler with zoom animation
       marker.getElement().addEventListener('click', () => {
         console.log("Marker clicked:", dorm.building_name);
+        
+        // Save current view before zooming
+        if (currentMap) {
+          originalMapView.current = {
+            center: currentMap.getCenter().toArray() as [number, number],
+            zoom: currentMap.getZoom(),
+            pitch: currentMap.getPitch(),
+            bearing: currentMap.getBearing()
+          };
+          
+          // Zoom to marker location with smooth animation
+          if (dorm.longitude !== undefined && dorm.latitude !== undefined) {
+            currentMap.flyTo({
+              center: [dorm.longitude, dorm.latitude],
+              zoom: 16,  // Closer zoom level
+              pitch: 45,  // Tilt the view to show 3D buildings
+              bearing: -20,  // Slight rotation for better perspective
+              speed: 1,  // Animation speed
+              curve: 1,  // Animation curve
+              essential: true  // This animation is essential for usability
+            });
+          }
+        }
+        
+        // Show modal with building details
         setSelectedDorm(dorm);
         setIsModalOpen(true);
       });
@@ -209,7 +250,23 @@ export default function SimplifiedMap() {
       <BuildingDataModal
         building={selectedDorm}
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          // Close the modal
+          setIsModalOpen(false);
+          
+          // Zoom back out to original view
+          if (map.current) {
+            map.current.flyTo({
+              center: originalMapView.current.center,
+              zoom: originalMapView.current.zoom,
+              pitch: originalMapView.current.pitch,  // Restore original pitch
+              bearing: originalMapView.current.bearing,  // Restore original bearing
+              speed: 0.8,  // Slightly slower for zoom out
+              curve: 1,
+              essential: true
+            });
+          }
+        }}
       />
     </div>
   );
