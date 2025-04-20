@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Shield, Flame, ArrowRight, Database } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRef, useEffect, useState } from "react";
@@ -50,8 +51,18 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
-      <header className="px-6 lg:px-10 h-20 flex items-center border-b sticky top-0 bg-white/95 backdrop-blur-sm z-50 shadow-sm">
+    <div className="flex flex-col min-h-screen relative overflow-hidden">
+      {/* Mapbox Container (Full screen background) */}
+      <div
+        ref={mapContainer}
+        className="absolute inset-0 w-full h-full z-0"
+        style={{ position: 'fixed' }} // Fixed positioning to cover entire viewport
+      />
+
+      {/* Semi-transparent overlay for better content visibility */}
+      <div className="absolute inset-0 bg-white/70 z-10" style={{ position: 'fixed' }}></div>
+      
+      <header className="px-6 lg:px-10 h-20 flex items-center border-b sticky top-0 bg-white/80 backdrop-blur-sm z-50 shadow-sm relative">
         <Link href="/" className="flex items-center gap-2">
           <Flame className="h-7 w-7 text-red-600" />
           <span className="font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-red-600 to-amber-600">
@@ -68,21 +79,13 @@ export default function LandingPage() {
         </nav>
       </header>
 
-      <main className="flex-1">
-        {/* Hero Section with Mapbox Background */}
-        <section className="w-full min-h-[calc(100vh-5rem)] relative overflow-hidden flex items-center">
-          {/* Mapbox Container (Background) */}
-          <div
-            ref={mapContainer}
-            className="absolute inset-0 w-full h-full z-0"
-          />
-
-          {/* Overlay for better text readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/80 to-white/60 z-10"></div>
+      <main className="flex-1 relative z-20">
+        {/* Hero Section */}
+        <section className="w-full min-h-[calc(100vh-5rem)] relative flex items-center">
 
           {/* Red highlight areas for fire safety zones */}
           {mapLoaded && (
-            <div className="absolute inset-0 z-20 pointer-events-none">
+            <div className="fixed inset-0 z-20 pointer-events-none">
               <div className="absolute top-1/4 left-1/3 w-24 h-24 rounded-full bg-red-500/20 animate-pulse"></div>
               <div className="absolute bottom-1/3 right-1/4 w-32 h-32 rounded-full bg-amber-500/20 animate-pulse delay-1000"></div>
               <div className="absolute top-1/2 left-1/2 w-16 h-16 rounded-full bg-red-500/30 animate-ping-slow"></div>
@@ -91,8 +94,22 @@ export default function LandingPage() {
 
           {/* Content */}
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-30">
-            <div className="max-w-4xl mx-auto lg:mx-0">
-              <div className="space-y-10 text-center lg:text-left">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mx-20">
+              {/* UC Davis Logo */}
+              <div className="hidden lg:flex items-center justify-center mt-10 lg:mt-0 lg:mr-12">
+                <div className="relative w-72 h-72">
+                  <Image
+                    src="/davis.png"
+                    alt="UC Davis Logo"
+                    fill
+                    style={{ objectFit: 'contain' }}
+                    className="drop-shadow-lg animate-float"
+                    priority
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-10 text-center lg:text-left lg:max-w-2xl">
                 <div className="space-y-6">
                   <h1 className="text-6xl font-extrabold tracking-tight sm:text-7xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-red-600 via-red-500 to-amber-600 drop-shadow-sm">
                     FireZero
@@ -129,7 +146,7 @@ export default function LandingPage() {
         {/* Data Sources Section */}
         <section
           id="data"
-          className="w-full py-24 lg:py-32 bg-white relative z-10"
+          className="w-full py-24 lg:py-32 relative z-20"
         >
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center space-y-8 mb-16">

@@ -130,12 +130,22 @@
   75%, 100% { transform: scale(2); opacity: 0; }
 }
 
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
 .animate-scan {
   animation: scan 4s linear infinite;
 }
 
 .animate-ping-slow {
   animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
 }
 
 .perspective-1000 {
