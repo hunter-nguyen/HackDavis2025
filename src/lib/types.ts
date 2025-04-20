@@ -26,6 +26,8 @@ export interface DormData {
   domestic_water: number | null;
   latitude?: number;
   longitude?: number;
+  fire_risk_score?: number;
+  action_steps?: string;
 }
 
 export type UCDDormData = DormData[];

@@ -3,14 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import { getDormData, getFireRiskScore } from "@/server/actions";
+import { getDormData } from "@/server/actions";
 import { UCDDormData } from "@/lib/types";
-
-// Extend HTMLButtonElement type for tracking listener
-interface HTMLButtonElementWithTracking extends HTMLButtonElement {
-  _clickHandlerAttached?: boolean;
-  _markerInstance?: mapboxgl.Marker;
-}
 
 // Set the access token
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
@@ -192,208 +186,99 @@ export default function MapboxMap({
 
   // Add markers for dorms
   useEffect(() => {
-    if (!map.current || !dormData || dormData.length === 0) return;
-
     const mapInstance = map.current;
-    const initialZoom = zoom; // Capture initial zoom prop value
-
-    // Helper function to determine marker color based on score
-    const getColorForScore = (score: number): string => {
-      if (score >= 90) return "#FF0000"; // Red
-      if (score >= 80) return "#FF4500"; // OrangeRed
-      if (score >= 70) return "#FFA500"; // Orange
-      if (score >= 60) return "#FFD700"; // Gold
-      return "#90EE90"; // LightGreen (for scores below 60)
-    };
+    if (!mapInstance || !dormData) return;
 
     // Clear existing markers
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
 
-    dormData.forEach((dorm) => {
-      // Generate a unique ID for the button based on dorm name or ID
-      const buttonId = `show-score-${dorm.building_name
-        .replace(/\s+/g, "-")
-        .toLowerCase()}`;
-      const scoreContainerId = `fire-risk-score-${dorm.building_name
-        .replace(/\s+/g, "-")
-        .toLowerCase()}`;
+    const initialZoom = mapInstance.getZoom(); // Get initial zoom for later
 
-      if (dorm.latitude !== undefined && dorm.longitude !== undefined) {
+    dormData.forEach((dorm) => {
+      if (dorm.latitude && dorm.longitude) {
         const dormLngLat: [number, number] = [dorm.longitude, dorm.latitude];
 
-        // Create expanded popup content directly here
-        const popupContent = `
-          <div class="max-w-sm p-4 bg-white rounded-lg shadow-lg mapboxgl-popup-content-custom">
-            <h3 class="text-lg font-bold mb-2 text-gray-800">${
-              dorm.building_name
-            }</h3>
-            <p class="text-sm text-gray-600 mb-3"><strong>Address:</strong> ${
-              dorm.address || "N/A"
-            }</p>
+        // --- Determine Marker Color ---
+        // Provide default score 0 if undefined
+        const scoreNum = dorm.fire_risk_score ?? 0;
+        const markerColor = getColorForScore(scoreNum); // Use helper function
 
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2 mb-3 text-sm">
-                <div>
-                    <span class="font-semibold text-gray-700">Fire Drills:</span>
-                    <span class="text-gray-600"> ${
-                      dorm.num_fire_drills ?? "N/A"
-                    }</span>
-                </div>
-            </div>
-
-            <div class="mb-3">
-              <h4 class="font-semibold text-gray-700 mb-1">Fire Safety:</h4>
-              <ul class="list-disc pl-4 text-sm text-gray-600">
-                <li>Sprinklers: ${
-                  dorm.fire_safety.sprinkler.full
-                    ? "Full"
-                    : dorm.fire_safety.sprinkler.partial
-                    ? "Partial"
-                    : "None"
-                }</li>
-                <li>Smoke Alarms: ${
-                  dorm.fire_safety.alarm.smoke ? "Yes" : "No"
-                }</li>
-                <li>Manual Pull Stations: ${
-                  dorm.fire_safety.alarm.manual_pull ? "Yes" : "No"
-                }</li>
-              </ul>
-            </div>
-
-            <div class="mb-3">
-              <h4 class="font-semibold text-gray-700 mb-1">Avg. Monthly Utilities:</h4>
-              <ul class="list-disc pl-4 text-sm text-gray-600">
-                <li>Electricity: ${dorm.electricity ?? "N/A"} kWh</li>
-                <li>Steam: ${dorm.steam ?? "N/A"} lbs</li>
-                <li>Chilled Water: ${dorm.chilled_water ?? "N/A"} Ton-Hrs</li>
-                <li>Domestic Water: ${dorm.domestic_water ?? "N/A"} Gallons</li>
-              </ul>
-            </div>
-            
-            <div class="mt-4 pt-3 border-t border-gray-200 text-center">
-                <button id="${buttonId}" class="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">View Resilience Score</button>
-                <div id="${scoreContainerId}" class="mt-2 text-sm text-gray-700"></div>
-            </div>
-          </div>
-        `;
-
-        // Create marker element
+        // Create a custom marker element
         const el = document.createElement("div");
-        el.className = "mapbox-marker";
-        el.style.width = "24px";
-        el.style.height = "24px";
-        el.style.background = "#4B9CD3"; // UC Davis blue
-        el.style.borderRadius = "50%";
-        el.style.border = "2px solid white";
-        el.style.cursor = "pointer";
+        el.className = "custom-dorm-marker";
+        // Apply color based on score
+        el.style.backgroundColor = markerColor;
+        el.style.width = '20px'; // Ensure size is defined
+        el.style.height = '20px'; // Ensure size is defined
+        el.style.borderRadius = '50%';
+        el.style.border = '2px solid white'; // Add border for visibility
+        el.style.cursor = 'pointer'; // Add cursor pointer for better UX
 
-        // Add click listener to the marker element for flyTo animation
+        // --- Add click listener to marker element for flyTo animation ---
         el.addEventListener("click", () => {
           mapInstance?.flyTo({
             center: dormLngLat,
             zoom: 16.5, // Adjust desired zoom level on click
             pitch: 50, // Optional: Adjust pitch slightly more
-            speed: 0.8, // Adjust speed (0-1)
+            speed: 0.8, // Adjust speed
             curve: 1.4, // Adjust curve factor
             essential: true, // Ensures animation completes
           });
         });
+        // --- End of added click listener ---
+
+        // --- Create Popup Content ---
+        // Directly include score and action steps
+        // Use optional chaining and nullish coalescing for safety
+        const scoreDisplay = dorm.fire_risk_score !== undefined ? `<strong>Fire Risk Score:</strong> ${dorm.fire_risk_score}/100` : 'Score not available.';
+        // Format action steps - split by newline and create list items
+        const stepsHtml = dorm.action_steps
+          ? `<strong>Action Steps:</strong><ul>${dorm.action_steps.split('\n').map(step => `<li>${step.trim()}</li>`).join('')}</ul>`
+          : 'Action steps not available.';
+
+        const popupContent = `
+          <div class="p-2">
+            <h3 class="text-lg font-semibold mb-1">${dorm.building_name}</h3>
+            <p class="text-sm text-gray-600 mb-2">${dorm.address}</p>
+            <div class="text-sm mb-2">
+              ${scoreDisplay}
+            </div>
+            <div class="text-sm">
+              ${stepsHtml}
+            </div>
+            <!-- Removed button and score container -->
+          </div>
+        `;
 
         // Create the popup instance
         const popup = new mapboxgl.Popup({
           offset: 25,
-          maxWidth: "320px", // Adjust max width as needed
-          className: "custom-dorm-popup", // Add specific class for styling
+          maxWidth: "320px",
+          className: "custom-dorm-popup",
         }).setHTML(popupContent);
 
-        // Create the marker (BEFORE attaching the popup listener setup,
-        // so 'marker' is defined in the scope the listener closes over)
+        // Create the marker with the colored element
         const marker = new mapboxgl.Marker(el)
           .setLngLat(dormLngLat)
           .setPopup(popup);
 
-        // Add listener for when the popup opens
+        // Add listener for when the popup opens - ONLY for zoom/close logic now
         popup.on("open", () => {
-          // Timeout to ensure the DOM is ready
+          // Keep the close listener for zoom adjustment.
           setTimeout(() => {
-            const button = document.getElementById(
-              buttonId
-            ) as HTMLButtonElementWithTracking | null;
-            const scoreContainer = document.getElementById(scoreContainerId);
-
-            // Store the marker instance on the button element for later access
-            if (button) {
-              button._markerInstance = marker;
-            }
-
-            if (button && scoreContainer && !button._clickHandlerAttached) {
-              button._clickHandlerAttached = true; // Mark as attached
-              button.addEventListener("click", async () => {
-                scoreContainer.innerHTML = "Loading score...";
-                // Retrieve the marker instance from the button
-                const markerToUpdate = button._markerInstance;
-
-                try {
-                  // Construct a prompt for the AI
-                  const prompt = `Calculate a fire risk score (0-100) for the building: ${
-                    dorm.building_name
-                  } at ${dorm.address}. Key details: 
-- Fire Sprinklers: ${
-                    dorm.fire_safety?.sprinkler?.full
-                      ? "Full"
-                      : dorm.fire_safety?.sprinkler?.partial
-                      ? "Partial"
-                      : "None"
-                  }
-- Smoke Alarms: ${dorm.fire_safety?.alarm?.smoke ? "Yes" : "No"}
-- Manual Pull Stations: ${dorm.fire_safety?.alarm?.manual_pull ? "Yes" : "No"}
-- Average Electricity Usage: ${dorm.electricity ?? "N/A"} kWh
-- Average Steam Usage: ${dorm.steam ?? "N/A"} lbs
-- Number of Fire Drills: ${dorm.num_fire_drills ?? "N/A"}. 
-Provide only the numerical score.`;
-
-                  const score = await getFireRiskScore(prompt); // Pass the constructed prompt
-
-                  scoreContainer.innerHTML = `<strong>Fire Risk Score:</strong> ${score}`;
-
-                  // --- Update Marker Color ---
-                  if (markerToUpdate) {
-                    const scoreNum = parseInt(score, 10);
-                    if (!isNaN(scoreNum)) {
-                      const color = getColorForScore(scoreNum);
-                      markerToUpdate.getElement().style.background = color;
-                    } else {
-                      console.warn(
-                        `Could not parse score "${score}" as number.`
-                      );
-                      // Optionally reset color to default if parsing fails
-                      // markerToUpdate.getElement().style.background = '#4B9CD3';
-                    }
-                  }
-                  // -------
-                } catch (err) {
-                  console.error("Failed to fetch fire risk score:", err);
-                  scoreContainer.innerHTML = "Error loading score.";
-                  // Optionally reset color to default on error
-                  // if (markerToUpdate) {
-                  //   markerToUpdate.getElement().style.background = '#4B9CD3';
-                  // }
-                }
-              });
-            }
-
             // Add listener for when THIS popup closes (zoom out)
             popup.once("close", () => {
               mapInstance?.easeTo({
-                zoom: initialZoom + 1, // Zoom out slightly from close view, maybe one level above initial
-                pitch: 45, // Reset pitch to initial map pitch
-                duration: 500, // Animation duration in ms
+                zoom: initialZoom + 1, // Zoom out slightly
+                pitch: 45, // Reset pitch
+                duration: 500,
               });
             });
-          }, 0); // Execute immediately after the current call stack clears
+          }, 0);
         });
 
-        // Add the marker to the map (popup is already associated)
+        // Add the marker to the map
         marker.addTo(mapInstance);
         markersRef.current.push(marker);
       }
@@ -401,11 +286,21 @@ Provide only the numerical score.`;
 
     // Cleanup markers
     return () => {
-      console.log("Cleaning up markers..."); // Optional: for debugging
+      // console.log("Cleaning up markers..."); // Keep if useful
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
     };
-  }, [dormData, map.current, zoom]);
+  // Ensure dependencies are correct - add getColorForScore if it's defined outside and used
+  }, [dormData, map, zoom]); // Assuming getColorForScore is stable or defined inside/outside scope appropriately
+
+  // Helper function to determine marker color based on score
+  const getColorForScore = (score: number): string => {
+    if (score >= 90) return "#FF0000"; // Red
+    if (score >= 80) return "#FF4500"; // OrangeRed
+    if (score >= 70) return "#FFA500"; // Orange
+    if (score >= 60) return "#FFD700"; // Gold
+    return "#90EE90"; // LightGreen (for scores below 60)
+  };
 
   if (loading) {
     return (
