@@ -23,8 +23,8 @@
     "steam": null,
     "chilled_water": null,
     "domestic_water": null,
-    "longitude": -121.738961,
-    "latitude": 38.543559,
+    "longitude": -121.7559,
+    "latitude": 38.5457,
     "fire_risk_score": 20,
     "action_steps": "- Implement a program of at least two fire drills per year.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly according to manufacturer's recommendations and local fire codes.\n- Review and update the building's fire safety plan, including evacuation procedures and emergency contact information."
   },
@@ -52,8 +52,8 @@
     "steam": null,
     "chilled_water": null,
     "domestic_water": null,
-    "longitude": -76.263924,
-    "latitude": 45.908736,
+    "longitude": -121.75669,
+    "latitude": 38.5456,
     "fire_risk_score": 20,
     "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
   },
@@ -81,8 +81,8 @@
     "steam": null,
     "chilled_water": null,
     "domestic_water": null,
-    "longitude": -121.738961,
-    "latitude": 38.543559,
+    "longitude": -121.7562,
+    "latitude": 38.54525,
     "fire_risk_score": 90,
     "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
   },
@@ -110,8 +110,8 @@
     "steam": null,
     "chilled_water": null,
     "domestic_water": null,
-    "longitude": -76.263924,
-    "latitude": 45.908736,
+    "longitude": -121.7552,
+    "latitude": 38.54564,
     "fire_risk_score": 20,
     "action_steps": "- Implement a program of at least two fire drills per year.\n- Review and update the fire safety plan to ensure all evacuation routes are clearly marked and easily accessible.\n- Conduct regular inspections of all fire safety equipment to ensure it is functioning correctly."
   },
@@ -371,8 +371,8 @@
     "steam": null,
     "chilled_water": null,
     "domestic_water": null,
-    "longitude": -70.495322,
-    "latitude": 44.132065,
+    "longitude": -121.7636,
+    "latitude": 38.5474,
     "fire_risk_score": 15,
     "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure proper functionality.\n- Implement a fire safety education program for residents."
   },
@@ -429,8 +429,8 @@
     "steam": null,
     "chilled_water": null,
     "domestic_water": null,
-    "longitude": 172.19356,
-    "latitude": -43.29781,
+    "longitude": -121.7633,
+    "latitude": 38.5469,
     "fire_risk_score": 15,
     "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Provide fire safety education and training to residents."
   }
