@@ -1,8 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
-import { MapPin, Shield, Flame, ArrowRight, Database } from "lucide-react"
+import { Shield, Flame, ArrowRight, Database } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRef, useEffect, useState } from "react"
 import mapboxgl from "mapbox-gl"
@@ -120,8 +119,8 @@ export default function LandingPage() {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center space-y-8 mb-16">
               <div className="inline-block">
-                              <span className="inline-block px-8 py-6 mb-4 rounded-full bg-gradient-to-r from-red-500 to-amber-500 text-white font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300 animate-pulse">
-                Data Sources
+                <span className="inline-block px-8 py-6 mb-4 rounded-full bg-gradient-to-r from-red-500 to-amber-500 text-white font-bold text-lg shadow-lg transform hover:scale-105 transition-all duration-300 animate-pulse">
+                  Data Sources
                 </span>
               </div>
               <h2 className="text-4xl font-bold sm:text-5xl">Our Data Sources</h2>
