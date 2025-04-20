@@ -1,14 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DormData } from "@/lib/types";
-import { X, AlertTriangle, Shield, Flame, CheckCircle, XCircle, Building, Activity, Info } from "lucide-react";
-import { getScoreColor } from "@/lib/utils";
+import { X, AlertTriangle, Shield, Flame, CheckCircle, XCircle, Building, Activity, Info, Play } from "lucide-react";
 
 interface BuildingDataModalProps {
   building: DormData | null;
   isOpen: boolean;
   onClose: () => void;
+  onStartSimulation: () => Promise<void>;
+  isSimulating?: boolean;
+  simulationHour?: number;
+  simulationComplete?: boolean;
+  isLoadingFireSpread?: boolean;
+}
+
+interface ActionPlan {
+  title: string;
+  description: string;
 }
 
 type TabType = 'safety' | 'building' | 'action';
@@ -17,10 +26,16 @@ export default function BuildingDataModal({
   building,
   isOpen,
   onClose,
+  onStartSimulation,
+  isSimulating = false,
+  simulationHour = 0,
+  simulationComplete = false,
+  isLoadingFireSpread = false
 }: BuildingDataModalProps) {
   const [activeTab, setActiveTab] = useState<TabType>('safety');
-  const [actionPlans, setActionPlans] = useState<Array<{ title: string; description: string }>>([]);
+  const [actionPlans, setActionPlans] = useState<ActionPlan[]>([]);
   const [isLoadingPlans, setIsLoadingPlans] = useState(false);
+  const [isVisualizing, setIsVisualizing] = useState(false);
 
   // Function to fetch action plans
   const fetchActionPlans = async () => {
@@ -68,7 +83,7 @@ export default function BuildingDataModal({
   };
 
   // Fetch action plans when switching to action tab
-  useEffect(() => {
+  React.useEffect(() => {
     if (activeTab === 'action' && building) {
       fetchActionPlans();
     }
@@ -78,7 +93,6 @@ export default function BuildingDataModal({
 
   // Calculate safety score percentage for the gauge
   const safetyScore = building.fire_risk_score !== undefined ? building.fire_risk_score : 50;
-  const scoreColor = getScoreColor(safetyScore);
   
   // Format safety features for display
   const safetyFeatures = [
@@ -162,13 +176,43 @@ export default function BuildingDataModal({
         {/* Safety Details Tab */}
         {activeTab === 'safety' && (
           <div className="p-4 space-y-4">
+            {/* Fire Visualization Section */}
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h3 className="text-md font-medium text-gray-800 flex items-center">
+                    <Flame className="w-4 h-4 mr-2 text-red-500" />
+                    Fire Spread Simulation
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">
+                    View an hour-by-hour simulation of potential fire spread
+                  </p>
+                </div>
+                <button
+                  onClick={async () => {
+                    setIsVisualizing(true);
+                    await onStartSimulation();
+                    setIsVisualizing(false);
+                  }}
+                  disabled={isVisualizing || isLoadingFireSpread || isSimulating || simulationComplete}
+                  className="flex items-center px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-red-100 text-red-600 hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Play className="w-4 h-4 mr-1.5" />
+                  {isLoadingFireSpread ? 'Loading...' : 
+                   simulationComplete ? 'Complete' :
+                   isSimulating ? 'Simulating...' : 
+                   'Visualize'}
+                  {(isVisualizing || isLoadingFireSpread) && (
+                    <div className="ml-1.5 animate-spin rounded-full h-3 w-3 border border-current border-t-transparent" />
+                  )}
+                </button>
+              </div>
+            </div>
+
             {/* Fire Safety Score */}
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
               <div className="flex items-center">
                 <div className="relative inline-block w-24 h-24 flex-shrink-0">
-                  {/* Circular background */}
-                  <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
-                  
                   {/* Progress arc */}
                   <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                     <circle 
@@ -176,7 +220,7 @@ export default function BuildingDataModal({
                       cy="50" 
                       r="40" 
                       fill="transparent"
-                      stroke={safetyScore >= 70 ? '#EF4444' : safetyScore >= 40 ? '#F59E0B' : '#10B981'}
+                      stroke="#EF4444"
                       strokeWidth="8"
                       strokeDasharray={`${safetyScore * 2.51} 251`} // 2.51 is approx 2*PI*40
                     />
@@ -184,7 +228,7 @@ export default function BuildingDataModal({
                   
                   {/* Score text */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
-                    <span className="text-2xl font-bold" style={{ color: safetyScore >= 70 ? '#EF4444' : safetyScore >= 40 ? '#F59E0B' : '#10B981' }}>
+                    <span className="text-2xl font-bold" style={{ color: "#EF4444" }}>
                       {safetyScore}
                     </span>
                     <span className="text-xs text-gray-500">Risk</span>
@@ -196,11 +240,11 @@ export default function BuildingDataModal({
                   {/* Risk level indicator */}
                   <div className="mt-1 inline-flex items-center px-2.5 py-1 rounded-full text-sm" 
                     style={{ 
-                      backgroundColor: safetyScore >= 70 ? 'rgba(239, 68, 68, 0.1)' : safetyScore >= 40 ? 'rgba(245, 158, 11, 0.1)' : 'rgba(16, 185, 129, 0.1)', 
-                      color: safetyScore >= 70 ? '#EF4444' : safetyScore >= 40 ? '#F59E0B' : '#10B981'
+                      backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+                      color: "#EF4444"
                     }}>
                     <AlertTriangle className="h-3.5 w-3.5 mr-1.5" />
-                    {safetyScore >= 70 ? "High Risk" : safetyScore >= 40 ? "Medium Risk" : "Low Risk"}
+                    High Risk
                   </div>
                   <div className="mt-1 text-xs text-gray-500">Last updated Apr 20, 2025</div>
                 </div>

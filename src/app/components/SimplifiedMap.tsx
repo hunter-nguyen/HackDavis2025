@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
+import * as turf from '@turf/turf';
 import { DormData } from "@/lib/types";
 import BuildingDataModal from "./BuildingDataModal";
 import { getDormData } from "@/server/actions";
@@ -10,13 +11,10 @@ import { getScoreColor } from "@/lib/utils";
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = mapboxToken;
 
-const DEFAULT_MAP_CENTER = [-121.762, 38.5382] satisfies [number, number];
-
 const DEFAULT_MAP_VIEW = {
-  center: DEFAULT_MAP_CENTER,
-  zoom: 14,
-  pitch: 0, // Default flat view
-  bearing: 0, // Default north orientation
+  longitude: -121.7516,
+  latitude: 38.5382,
+  zoom: 15
 };
 
 export default function SimplifiedMap() {
@@ -31,6 +29,11 @@ export default function SimplifiedMap() {
   const [dorms, setDorms] = useState<DormData[]>([]);
   const [selectedDorm, setSelectedDorm] = useState<DormData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [simulationHour, setSimulationHour] = useState(0);
+  const [fireSpreadData, setFireSpreadData] = useState<any>(null);
+  const [simulationComplete, setSimulationComplete] = useState(false);
+  const [isLoadingFireSpread, setIsLoadingFireSpread] = useState(false);
 
   // Store original map view to restore when closing modal
   const originalMapView = useRef(DEFAULT_MAP_VIEW);
@@ -63,7 +66,7 @@ export default function SimplifiedMap() {
       const newMap = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/standard",
-        center: DEFAULT_MAP_CENTER,
+        center: [-121.764, 38.54],
         zoom: 14.5,
       });
 
@@ -75,10 +78,9 @@ export default function SimplifiedMap() {
 
         // Store initial map view for restoration when modal closes
         originalMapView.current = {
-          center: DEFAULT_MAP_CENTER,
+          longitude: -121.7516,
+          latitude: 38.5382,
           zoom: newMap.getZoom(),
-          pitch: newMap.getPitch(),
-          bearing: newMap.getBearing(),
         };
       });
 
@@ -142,13 +144,32 @@ export default function SimplifiedMap() {
       marker.getElement().addEventListener("click", () => {
         console.log("Marker clicked:", dorm.building_name);
 
+        // Reset all simulation-related states
+        setIsSimulating(false);
+        setSimulationHour(0);
+        setFireSpreadData(null);
+        setSimulationComplete(false);
+        setIsLoadingFireSpread(false);
+
+        // Clean up existing fire visualization layers
+        if (map.current) {
+          if (map.current.getLayer('fire-layer-fill')) {
+            map.current.removeLayer('fire-layer-fill');
+          }
+          if (map.current.getLayer('fire-layer-line')) {
+            map.current.removeLayer('fire-layer-line');
+          }
+          if (map.current.getSource('fire-source')) {
+            map.current.removeSource('fire-source');
+          }
+        }
+
         // Save current view before zooming
         if (currentMap) {
           originalMapView.current = {
-            center: currentMap.getCenter().toArray() as [number, number],
+            longitude: currentMap.getCenter().lng,
+            latitude: currentMap.getCenter().lat,
             zoom: currentMap.getZoom(),
-            pitch: currentMap.getPitch(),
-            bearing: currentMap.getBearing(),
           };
 
           // Zoom to marker location with smooth animation
@@ -158,8 +179,8 @@ export default function SimplifiedMap() {
               zoom: 17, // Closer zoom level
               pitch: 45, // Tilt the view to show 3D buildings
               bearing: -20, // Slight rotation for better perspective
-              speed: 1.5, // Animation speed
-              curve: 1.5, // Animation curve
+              speed: 1, // Animation speed
+              curve: 1, // Animation curve
               essential: true, // This animation is essential for usability
             });
           }
@@ -176,6 +197,143 @@ export default function SimplifiedMap() {
 
     console.log("Added", markersRef.current.length, "markers");
   }, [dorms, loading]);
+
+  // Fire simulation logic
+  useEffect(() => {
+    if (!isSimulating || !map.current || !selectedDorm) {
+      setSimulationHour(0);
+      setFireSpreadData(null);
+      setSimulationComplete(false);
+      setIsLoadingFireSpread(false);
+      // Clean up existing layers
+      if (map.current) {
+        if (map.current.getLayer('fire-layer-fill')) {
+          map.current.removeLayer('fire-layer-fill');
+        }
+        if (map.current.getLayer('fire-layer-line')) {
+          map.current.removeLayer('fire-layer-line');
+        }
+        if (map.current.getSource('fire-source')) {
+          map.current.removeSource('fire-source');
+        }
+      }
+      return;
+    }
+
+    const startSimulation = async () => {
+      try {
+        setIsLoadingFireSpread(true);
+        const response = await fetch('/api/fireSpread', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ building: selectedDorm }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch fire spread data');
+        }
+
+        const data = await response.json();
+        console.log('Fire spread data:', data);
+        setFireSpreadData(data);
+        setIsLoadingFireSpread(false);
+      } catch (error) {
+        console.error('Error fetching fire spread:', error);
+        setIsSimulating(false);
+        setIsLoadingFireSpread(false);
+      }
+    };
+
+    if (!fireSpreadData) {
+      startSimulation();
+      return;
+    }
+
+    // Set simulation complete when reaching hour 3
+    if (simulationHour >= 3 && !simulationComplete) {
+      setSimulationComplete(true);
+      return;
+    }
+
+    // Update fire visualization based on current hour
+    const currentHourData = fireSpreadData.hours[simulationHour];
+    if (!currentHourData) return;
+
+    console.log('Current hour data:', currentHourData);
+
+    // Transform coordinates to be centered around the building location
+    const transformedCoordinates = currentHourData.coordinates.map(coord => [
+      selectedDorm.longitude + coord[0],
+      selectedDorm.latitude + coord[1]
+    ]);
+    
+    // Create a feature for the fire spread
+    const fireSource = {
+      type: 'geojson',
+      data: {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Polygon',
+          coordinates: [transformedCoordinates]
+        }
+      }
+    };
+
+    // Add or update the fire source and layers
+    const updateFireVisualization = () => {
+      if (!map.current) return;
+
+      // Add or update the fire source
+      if (!map.current.getSource('fire-source')) {
+        map.current.addSource('fire-source', fireSource);
+      } else {
+        (map.current.getSource('fire-source') as mapboxgl.GeoJSONSource).setData(fireSource.data);
+      }
+
+      // Add fire layers if they don't exist
+      if (!map.current.getLayer('fire-layer-fill')) {
+        map.current.addLayer({
+          id: 'fire-layer-fill',
+          type: 'fill',
+          source: 'fire-source',
+          paint: {
+            'fill-color': '#ff0000',
+            'fill-opacity': 0.3
+          }
+        });
+
+        map.current.addLayer({
+          id: 'fire-layer-line',
+          type: 'line',
+          source: 'fire-source',
+          paint: {
+            'line-color': '#ff0000',
+            'line-width': 2,
+            'line-blur': 1,
+            'line-opacity': 0.8
+          }
+        });
+      }
+    };
+
+    updateFireVisualization();
+
+    // Auto-advance timer only if not complete
+    if (!simulationComplete) {
+      const hourTimer = setTimeout(() => {
+        if (simulationHour < 3) {
+          setSimulationHour(prev => prev + 1);
+        }
+      }, 5000);
+
+      return () => {
+        clearTimeout(hourTimer);
+      };
+    }
+  }, [isSimulating, simulationHour, selectedDorm, fireSpreadData, simulationComplete]);
 
   return (
     <div style={{ width: "100%", height: "100vh", position: "relative" }}>
@@ -250,23 +408,63 @@ export default function SimplifiedMap() {
         }}
       />
 
+      {/* Hour Display Overlay */}
+      {(isSimulating || isLoadingFireSpread) && (
+        <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm rounded-lg overflow-hidden shadow-lg z-10">
+          <div className="px-4 py-2 text-white font-medium text-sm">
+            {isLoadingFireSpread ? (
+              <div className="flex items-center space-x-2 py-1">
+                <div className="animate-spin rounded-full h-3 w-3 border border-white border-t-transparent" />
+                <span>Visualizing...</span>
+              </div>
+            ) : (
+              [1, 2, 3].map((hour) => (
+                <div
+                  key={hour}
+                  onClick={() => simulationComplete && setSimulationHour(hour - 1)}
+                  className={`flex items-center space-x-2 py-1 ${
+                    simulationHour + 1 === hour ? 'text-red-400' : 'text-white/70'
+                  } ${
+                    simulationComplete ? 'cursor-pointer hover:bg-white/10' : ''
+                  }`}
+                >
+                  <div 
+                    className={`w-2 h-2 rounded-full ${
+                      simulationHour + 1 === hour ? 'bg-red-400' : 
+                      simulationHour + 1 > hour ? 'bg-red-400/50' : 'bg-white/30'
+                    }`}
+                  />
+                  <span>Hour {hour}</span>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
       <BuildingDataModal
-        building={selectedDorm}
         isOpen={isModalOpen}
         onClose={() => {
-          // Close the modal
           setIsModalOpen(false);
-
-          // Zoom back out to original view
+          setSelectedDorm(null);
           if (map.current) {
-            map.current.flyTo({
-              ...DEFAULT_MAP_VIEW,
-              speed: 1.5,
-              curve: 1.5,
-              essential: true,
+            map.current.easeTo({
+              center: [originalMapView.current.longitude, originalMapView.current.latitude],
+              zoom: originalMapView.current.zoom,
+              duration: 1000,
             });
           }
         }}
+        building={selectedDorm!}
+        onStartSimulation={async () => {
+          setSimulationComplete(false); // Reset completion state
+          setSimulationHour(0); // Reset hour
+          setIsSimulating(true); // Start simulation
+        }}
+        isSimulating={isSimulating}
+        simulationHour={simulationHour}
+        simulationComplete={simulationComplete}
+        isLoadingFireSpread={isLoadingFireSpread}
       />
     </div>
   );
