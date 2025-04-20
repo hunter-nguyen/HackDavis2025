@@ -11,11 +11,11 @@ const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = mapboxToken;
 
 const DEFAULT_MAP_VIEW = {
-    center: [-121.752, 38.5382] as [number, number],
-    zoom: 14,
-    pitch: 0, // Default flat view
-    bearing: 0, // Default north orientation
-  }
+  center: [-121.752, 38.5382] as [number, number],
+  zoom: 14,
+  pitch: 0, // Default flat view
+  bearing: 0, // Default north orientation
+};
 
 export default function SimplifiedMap() {
   // DOM references
@@ -61,7 +61,7 @@ export default function SimplifiedMap() {
       const newMap = new mapboxgl.Map({
         container: mapContainer.current,
         style: "mapbox://styles/mapbox/standard",
-        center: [-121.756, 38.54],
+        center: [-121.764, 38.54],
         zoom: 14.5,
       });
 
@@ -125,10 +125,10 @@ export default function SimplifiedMap() {
 
       // Get color based on risk score - matching BuildingDataModal calculation
       const safetyScore = dorm.fire_risk_score ?? 50;
-      
+
       // Use the same color logic as BuildingDataModal
       const markerColor = getScoreColor(safetyScore);
-      
+
       // Create color-coded Mapbox marker
       const marker = new mapboxgl.Marker({
         color: markerColor,
