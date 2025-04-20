@@ -48,6 +48,7 @@ export default function MapboxMap({
         style,
         center,
         zoom,
+        pitch: 45, // Set initial pitch here
         attributionControl: true,
       });
 
@@ -60,10 +61,9 @@ export default function MapboxMap({
       // Add scale control
       map.current.addControl(new mapboxgl.ScaleControl());
 
-      // Handle map load: Set pitch and add 3D buildings
+      // Handle map load: Add 3D buildings (pitch is already set)
       map.current.on("load", () => {
         if (!map.current) return;
-        map.current.setPitch(45); // Set initial pitch for 3D view
 
         // Ensure the composite source is loaded before adding the layer
         if (map.current.getSource("composite")) {
@@ -195,14 +195,15 @@ export default function MapboxMap({
     if (!map.current || !dormData || dormData.length === 0) return;
 
     const mapInstance = map.current;
+    const initialZoom = zoom; // Capture initial zoom prop value
 
     // Helper function to determine marker color based on score
     const getColorForScore = (score: number): string => {
-      if (score >= 90) return '#FF0000'; // Red
-      if (score >= 80) return '#FF4500'; // OrangeRed
-      if (score >= 70) return '#FFA500'; // Orange
-      if (score >= 60) return '#FFD700'; // Gold
-      return '#90EE90'; // LightGreen (for scores below 60)
+      if (score >= 90) return "#FF0000"; // Red
+      if (score >= 80) return "#FF4500"; // OrangeRed
+      if (score >= 70) return "#FFA500"; // Orange
+      if (score >= 60) return "#FFD700"; // Gold
+      return "#90EE90"; // LightGreen (for scores below 60)
     };
 
     // Clear existing markers
@@ -219,6 +220,8 @@ export default function MapboxMap({
         .toLowerCase()}`;
 
       if (dorm.latitude !== undefined && dorm.longitude !== undefined) {
+        const dormLngLat: [number, number] = [dorm.longitude, dorm.latitude];
+
         // Create expanded popup content directly here
         const popupContent = `
           <div class="max-w-sm p-4 bg-white rounded-lg shadow-lg mapboxgl-popup-content-custom">
@@ -284,6 +287,18 @@ export default function MapboxMap({
         el.style.border = "2px solid white";
         el.style.cursor = "pointer";
 
+        // Add click listener to the marker element for flyTo animation
+        el.addEventListener("click", () => {
+          mapInstance?.flyTo({
+            center: dormLngLat,
+            zoom: 16.5, // Adjust desired zoom level on click
+            pitch: 50, // Optional: Adjust pitch slightly more
+            speed: 0.8, // Adjust speed (0-1)
+            curve: 1.4, // Adjust curve factor
+            essential: true, // Ensures animation completes
+          });
+        });
+
         // Create the popup instance
         const popup = new mapboxgl.Popup({
           offset: 25,
@@ -291,13 +306,13 @@ export default function MapboxMap({
           className: "custom-dorm-popup", // Add specific class for styling
         }).setHTML(popupContent);
 
-        // Create the marker (BEFORE attaching the popup listener setup, 
+        // Create the marker (BEFORE attaching the popup listener setup,
         // so 'marker' is defined in the scope the listener closes over)
         const marker = new mapboxgl.Marker(el)
-          .setLngLat([dorm.longitude, dorm.latitude])
-          .setPopup(popup); 
+          .setLngLat(dormLngLat)
+          .setPopup(popup);
 
-        // Add listener for when the popup opens 
+        // Add listener for when the popup opens
         popup.on("open", () => {
           // Timeout to ensure the DOM is ready
           setTimeout(() => {
@@ -305,10 +320,10 @@ export default function MapboxMap({
               buttonId
             ) as HTMLButtonElementWithTracking | null;
             const scoreContainer = document.getElementById(scoreContainerId);
-            
+
             // Store the marker instance on the button element for later access
             if (button) {
-              button._markerInstance = marker; 
+              button._markerInstance = marker;
             }
 
             if (button && scoreContainer && !button._clickHandlerAttached) {
@@ -320,43 +335,61 @@ export default function MapboxMap({
 
                 try {
                   // Construct a prompt for the AI
-                  const prompt = `Calculate a fire risk score (0-100) for the building: ${dorm.building_name} at ${dorm.address}. Key details: 
-- Fire Sprinklers: ${dorm.fire_safety?.sprinkler?.full ? "Full" : dorm.fire_safety?.sprinkler?.partial ? "Partial" : "None"}
+                  const prompt = `Calculate a fire risk score (0-100) for the building: ${
+                    dorm.building_name
+                  } at ${dorm.address}. Key details: 
+- Fire Sprinklers: ${
+                    dorm.fire_safety?.sprinkler?.full
+                      ? "Full"
+                      : dorm.fire_safety?.sprinkler?.partial
+                      ? "Partial"
+                      : "None"
+                  }
 - Smoke Alarms: ${dorm.fire_safety?.alarm?.smoke ? "Yes" : "No"}
 - Manual Pull Stations: ${dorm.fire_safety?.alarm?.manual_pull ? "Yes" : "No"}
-- Average Electricity Usage: ${dorm.electricity ?? 'N/A'} kWh
-- Average Steam Usage: ${dorm.steam ?? 'N/A'} lbs
-- Number of Fire Drills: ${dorm.num_fire_drills ?? 'N/A'}. 
+- Average Electricity Usage: ${dorm.electricity ?? "N/A"} kWh
+- Average Steam Usage: ${dorm.steam ?? "N/A"} lbs
+- Number of Fire Drills: ${dorm.num_fire_drills ?? "N/A"}. 
 Provide only the numerical score.`;
-                  
+
                   const score = await getFireRiskScore(prompt); // Pass the constructed prompt
-                  
+
                   scoreContainer.innerHTML = `<strong>Fire Risk Score:</strong> ${score}`;
-                  
-                  // --- Update Marker Color --- 
+
+                  // --- Update Marker Color ---
                   if (markerToUpdate) {
                     const scoreNum = parseInt(score, 10);
                     if (!isNaN(scoreNum)) {
                       const color = getColorForScore(scoreNum);
                       markerToUpdate.getElement().style.background = color;
                     } else {
-                       console.warn(`Could not parse score "${score}" as number.`);
-                       // Optionally reset color to default if parsing fails
-                       // markerToUpdate.getElement().style.background = '#4B9CD3'; 
+                      console.warn(
+                        `Could not parse score "${score}" as number.`
+                      );
+                      // Optionally reset color to default if parsing fails
+                      // markerToUpdate.getElement().style.background = '#4B9CD3';
                     }
                   }
                   // -------
-                  
                 } catch (err) {
                   console.error("Failed to fetch fire risk score:", err);
                   scoreContainer.innerHTML = "Error loading score.";
-                   // Optionally reset color to default on error
-                  // if (markerToUpdate) { 
+                  // Optionally reset color to default on error
+                  // if (markerToUpdate) {
                   //   markerToUpdate.getElement().style.background = '#4B9CD3';
                   // }
                 }
               });
             }
+
+            // Add listener for when THIS popup closes (zoom out)
+            popup.once("close", () => {
+              mapInstance?.easeTo({
+                zoom: initialZoom + 1, // Zoom out slightly from close view, maybe one level above initial
+                pitch: 45, // Reset pitch to initial map pitch
+                duration: 500, // Animation duration in ms
+              });
+            });
           }, 0); // Execute immediately after the current call stack clears
         });
 
@@ -368,10 +401,11 @@ Provide only the numerical score.`;
 
     // Cleanup markers
     return () => {
+      console.log("Cleaning up markers..."); // Optional: for debugging
       markersRef.current.forEach((marker) => marker.remove());
       markersRef.current = [];
     };
-  }, [dormData]);
+  }, [dormData, map.current, zoom]);
 
   if (loading) {
     return (
