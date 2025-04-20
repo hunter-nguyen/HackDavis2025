@@ -10,6 +10,8 @@ import { getScoreColor } from "@/lib/utils";
 const mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = mapboxToken;
 
+const DEFAULT_MAP_CENTER = [-121.762, 38.5382] satisfies [number, number];
+
 const DEFAULT_MAP_VIEW = {
   center: [-121.752, 38.5382] as [number, number],
   zoom: 14,
@@ -73,7 +75,7 @@ export default function SimplifiedMap() {
 
         // Store initial map view for restoration when modal closes
         originalMapView.current = {
-          center: [-121.752, 38.5382],
+          center: DEFAULT_MAP_CENTER,
           zoom: newMap.getZoom(),
           pitch: newMap.getPitch(),
           bearing: newMap.getBearing(),
@@ -156,8 +158,8 @@ export default function SimplifiedMap() {
               zoom: 17, // Closer zoom level
               pitch: 45, // Tilt the view to show 3D buildings
               bearing: -20, // Slight rotation for better perspective
-              speed: 1, // Animation speed
-              curve: 1, // Animation curve
+              speed: 1.5, // Animation speed
+              curve: 1.5, // Animation curve
               essential: true, // This animation is essential for usability
             });
           }
@@ -259,8 +261,8 @@ export default function SimplifiedMap() {
           if (map.current) {
             map.current.flyTo({
               ...DEFAULT_MAP_VIEW,
-              speed: 1,
-              curve: 1,
+              speed: 1.5,
+              curve: 1.5,
               essential: true,
             });
           }
