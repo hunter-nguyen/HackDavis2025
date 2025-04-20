@@ -1,3 +1,9 @@
+![image](https://github.com/user-attachments/assets/2c9d0753-4e98-4724-a069-66b4daa904db)
+
+![image](https://github.com/user-attachments/assets/fee45231-4eae-4b04-9a37-d21532121c81)
+
+
+
 # FireZero - Data Visualization
 
 This folder contains the scripts and data needed to generate static visualizations of building fire risk scores for the FireZero project, using the UC Davis CEED dataset and Clery Fire Safety Report.
