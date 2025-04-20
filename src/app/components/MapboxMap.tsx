@@ -5,30 +5,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { getDormData, getFireRiskScore } from "@/server/actions";
 import { UCDDormData } from "@/lib/types";
-import CompositeScore from "./CompositeScore";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-
-// Define the BuildingData interface to match what CompositeScore expects
-interface BuildingData {
-  name: string;
-  fireIncidents: number;
-  hasAlarm: boolean;
-  hasSprinkler: boolean;
-  energyIntensity: number;
-  waterStrain: number;
-  gasStrain: number;
-  buildingAge: number;
-  buildingType: string;
-  demographics: string;
-}
 
 // Extend HTMLButtonElement type for tracking listener
 interface HTMLButtonElementWithTracking extends HTMLButtonElement {
@@ -56,7 +32,6 @@ export default function MapboxMap({
   const [dormData, setDormData] = useState<UCDDormData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedDorm, setSelectedDorm] = useState<BuildingData | null>(null);
 
   // Initialize map
   useEffect(() => {
@@ -467,41 +442,6 @@ Provide only the numerical score.`;
           }
         `}</style>
       </div>
-
-      {/* Shadcn UI Dialog for Composite Score */}
-      <Dialog
-        open={!!selectedDorm}
-        onOpenChange={(isOpen: boolean) => {
-          if (!isOpen) {
-            setSelectedDorm(null);
-          }
-        }}
-      >
-        <DialogContent className="sm:max-w-[600px]">
-          {selectedDorm && (
-            <>
-              <DialogHeader>
-                <DialogTitle>
-                  {selectedDorm.name} - Resilience Score
-                </DialogTitle>
-                {/* Optional: Add DialogDescription if needed */}
-                {/* <DialogDescription>Details about the building's resilience score.</DialogDescription> */}
-              </DialogHeader>
-              <div className="py-4">
-                <CompositeScore building={selectedDorm} />
-              </div>
-              <DialogFooter>
-                {/* DialogClose automatically handles closing the dialog */}
-                <DialogClose asChild>
-                  <Button type="button" variant="secondary">
-                    Close
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
