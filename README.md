@@ -7,28 +7,44 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
+## 📊 Running the Visualization
+
+To generate reproducible static data visualizations:
+
+1. Navigate to the visualization directory:
+   ```bash
+   cd @visualization/
+   ```
+
+2. Install required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Run the visualization script:
+   ```bash
+   python visualize_fire_risk.py
+   ```
+
+This will create several output files in the current directory, including charts and maps visualizing the fire risk data for UC Davis buildings.
 
 ## 🧭 Overview
 
-**FireZero** is a fire risk planning and visualization tool 🔍🔥 designed for government operations and infrastructure planners. It maps UC Davis buildings 🏢 using **Mapbox** and overlays risk scores derived from utility and safety data 📊.
+**FireZero** is a fire risk planning and visualization tool designed for government operations and infrastructure planners. It maps UC Davis buildings using **Mapbox** and overlays risk scores derived from utility and safety data 📊.
 
-Each building is assigned a **composite fire risk score** (0-100) based on:
+Each building is assigned a **composite fire risk score** (0-100) based on two key datasets:
+1. [CEED UC Davis](https://ceed.ucdavis.edu/)
+2. [Clery Fire Safety Report](https://clery.ucdavis.edu/sites/g/files/dgvnsk1761/files/media/documents/ASFSR-UCD-2024vOct2024_0.pdf)
 
--   🔌 Energy intensity
--   💧 Water consumption
--   🔥 Historical fire incidents
--   🏭 Gas usage
-
-Natural language summaries and actionable planning recommendations are generated via the **Gemini API**, transforming raw data into readable insights 📘. Explore each building’s fire resilience, receive actionable safety steps, and make data-informed decisions — all in one interactive dashboard 🗺️.
+The application aggregates contextual data from both the CEED UC Davis dataset and the Clery Fire Safety Report into a comprehensive JSON structure. This unified data format enables seamless integration of utility consumption metrics, fire safety features, and historical incident data, providing a holistic view of each building's fire risk profile.
 
 ---
-
 ## 🧰 Tech Stack
 
--   ⚙️ **Framework:** [Next.js](https://nextjs.org/)
--   🧠 **Language:** [TypeScript](https://www.typescriptlang.org/)
--   🎨 **Styling:** [Tailwind CSS](https://tailwindcss.com/)
--   📦 **Package Manager:** [npm](https://www.npmjs.com/)
+- ⚙️ **Frontend:** [Next.js](https://nextjs.org/)
+- 🎨 **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- 🗄️ **Backend:** JSON data stored in `/data/` directory
+- 📦 **Package Manager:** [npm](https://www.npmjs.com/)
 
 ---
 
@@ -81,41 +97,5 @@ npm run dev
 ```
 
 Visit 👉 [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
----
-
-## 🗂️ Project Structure
-
-```bash
-/
-├── data/            # Project-specific data files
-├── public/          # Static assets (images, fonts, etc.)
-├── src/             # Main application source code
-│   ├── app/         # Next.js App Router (routing, pages, layouts)
-│   ├── components/  # Reusable UI components
-│   ├── lib/         # Utility functions, helpers
-│   └── ...
-├── .env             # Local environment variables (ignored by git)
-├── .env.example     # Example environment variables
-├── .gitignore       # Files ignored by git
-├── next.config.ts   # Next.js configuration
-├── package.json     # Project metadata and dependencies
-├── README.md        # This file
-├── tsconfig.json    # TypeScript configuration
-└── ...              # Other config files (ESLint, PostCSS, etc.)
-```
-
-### 📎 Key Highlights:
-
--   `src/app`: Core app logic, routes, and layouts
--   `src/components`: Shared UI components 💅
--   `public`: Static files (images, icons, etc.)
--   `data`: Structured datasets and building metadata
-
----
-
-## 💡 Inspiration
-
-This project was built during **HackDavis 2025** to help first responders plan fire risk responses more effectively using open datasets, modern geospatial tools, and AI 🧠.
 
 ---
