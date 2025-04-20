@@ -1,437 +1,756 @@
 [
-  {
-    "building_name": "Laurel",
-    "address": "506 Primero Grove Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Laurel",
+      "address": "506 Primero Grove Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.7559,
+      "latitude": 38.5457,
+      "fire_risk_score": 20,
+      "action_steps": "- Implement a program of at least two fire drills per year.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly according to manufacturer's recommendations and local fire codes.\n- Review and update the building's fire safety plan, including evacuation procedures and emergency contact information."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.7559,
-    "latitude": 38.5457,
-    "fire_risk_score": 20,
-    "action_steps": "- Implement a program of at least two fire drills per year.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly according to manufacturer's recommendations and local fire codes.\n- Review and update the building's fire safety plan, including evacuation procedures and emergency contact information."
-  },
-  {
-    "building_name": "Magnolia",
-    "address": "512 Primero Grove Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Magnolia",
+      "address": "512 Primero Grove Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.75669,
+      "latitude": 38.5456,
+      "fire_risk_score": 20,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.75669,
-    "latitude": 38.5456,
-    "fire_risk_score": 20,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
-  },
-  {
-    "building_name": "Manzanita",
-    "address": "518 Primero Grove Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Manzanita",
+      "address": "518 Primero Grove Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.7562,
+      "latitude": 38.54525,
+      "fire_risk_score": 90,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.7562,
-    "latitude": 38.54525,
-    "fire_risk_score": 90,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Conduct regular inspections of all fire safety equipment to ensure functionality."
-  },
-  {
-    "building_name": "Spruce",
-    "address": "500 Primero Grove Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Spruce",
+      "address": "500 Primero Grove Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.7552,
+      "latitude": 38.54564,
+      "fire_risk_score": 20,
+      "action_steps": "- Implement a program of at least two fire drills per year.\n- Review and update the fire safety plan to ensure all evacuation routes are clearly marked and easily accessible.\n- Conduct regular inspections of all fire safety equipment to ensure it is functioning correctly."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.7552,
-    "latitude": 38.54564,
-    "fire_risk_score": 20,
-    "action_steps": "- Implement a program of at least two fire drills per year.\n- Review and update the fire safety plan to ensure all evacuation routes are clearly marked and easily accessible.\n- Conduct regular inspections of all fire safety equipment to ensure it is functioning correctly."
-  },
-  {
-    "building_name": "184 Horizon Street",
-    "address": "184 Horizon Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "184 Horizon Street",
+      "address": "184 Horizon Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.77822,
+      "latitude": 38.540585,
+      "fire_risk_score": 20,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Inspect all fire safety equipment (sprinklers, alarms, etc.) to ensure functionality and report any issues immediately."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.77822,
-    "latitude": 38.540585,
-    "fire_risk_score": 20,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, ensuring all residents are familiar with procedures.\n- Inspect all fire safety equipment (sprinklers, alarms, etc.) to ensure functionality and report any issues immediately."
-  },
-  {
-    "building_name": "187 Mint Street",
-    "address": "187 Mint Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "187 Mint Street",
+      "address": "187 Mint Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.777031,
+      "latitude": 38.540594,
+      "fire_risk_score": 90,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, including clear signage and escape routes.\n- Ensure all fire safety equipment is regularly inspected and maintained."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.777031,
-    "latitude": 38.540594,
-    "fire_risk_score": 90,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, including clear signage and escape routes.\n- Ensure all fire safety equipment is regularly inspected and maintained."
-  },
-  {
-    "building_name": "2079 Tilia Street",
-    "address": "2079 Tilia Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "2079 Tilia Street",
+      "address": "2079 Tilia Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.774871,
+      "latitude": 38.54265,
+      "fire_risk_score": 85,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan to include procedures for different scenarios.\n- Ensure all fire safety equipment is regularly inspected and maintained."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.774871,
-    "latitude": 38.54265,
-    "fire_risk_score": 85,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan to include procedures for different scenarios.\n- Ensure all fire safety equipment is regularly inspected and maintained."
-  },
-  {
-    "building_name": "2231 Jade Street",
-    "address": "2231 Jade Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "2231 Jade Street",
+      "address": "2231 Jade Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.777021,
+      "latitude": 38.54136,
+      "fire_risk_score": 90,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan, including evacuation procedures.\n- Ensure all fire safety equipment is regularly inspected and maintained."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.777021,
-    "latitude": 38.54136,
-    "fire_risk_score": 90,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan, including evacuation procedures.\n- Ensure all fire safety equipment is regularly inspected and maintained."
-  },
-  {
-    "building_name": "298 Celadon Street",
-    "address": "298 Celadon Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "298 Celadon Street",
+      "address": "298 Celadon Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.772927,
+      "latitude": 38.54258,
+      "fire_risk_score": 90,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan, including evacuation procedures.\n- Ensure all fire safety equipment is regularly inspected and maintained."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.772927,
-    "latitude": 38.54258,
-    "fire_risk_score": 90,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety plan, including evacuation procedures.\n- Ensure all fire safety equipment is regularly inspected and maintained."
-  },
-  {
-    "building_name": "298 Citron Street",
-    "address": "298 Citron Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "298 Citron Street",
+      "address": "298 Citron Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.775682,
+      "latitude": 38.54263,
+      "fire_risk_score": 90,
+      "action_steps": "- Implement a mandatory fire drill program with a minimum of two drills per year.\n- Review and update the evacuation plan, ensuring all occupants are familiar with procedures.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly to ensure functionality."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.775682,
-    "latitude": 38.54263,
-    "fire_risk_score": 90,
-    "action_steps": "- Implement a mandatory fire drill program with a minimum of two drills per year.\n- Review and update the evacuation plan, ensuring all occupants are familiar with procedures.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) regularly to ensure functionality."
-  },
-  {
-    "building_name": "298 Horizon Street",
-    "address": "298 Horizon Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "298 Horizon Street",
+      "address": "298 Horizon Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.778165,
+      "latitude": 38.542721,
+      "fire_risk_score": 80,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety procedures and evacuation plan.\n- Ensure all fire safety equipment is regularly inspected and maintained."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.778165,
-    "latitude": 38.542721,
-    "fire_risk_score": 80,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the fire safety procedures and evacuation plan.\n- Ensure all fire safety equipment is regularly inspected and maintained."
-  },
-  {
-    "building_name": "301 Celadon Street",
-    "address": "301 Celadon Street, Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "301 Celadon Street",
+      "address": "301 Celadon Street, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 0,
+      "electricity": null,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.77406,
+      "latitude": 38.542625,
+      "fire_risk_score": 80,
+      "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, including training for residents and staff.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) to ensure functionality."
     },
-    "num_fire_drills": 0,
-    "electricity": null,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.77406,
-    "latitude": 38.542625,
-    "fire_risk_score": 80,
-    "action_steps": "- Implement a program of regular fire drills (at least twice yearly).\n- Review and update the evacuation plan, including training for residents and staff.\n- Inspect and test all fire safety equipment (sprinklers, alarms, pull stations) to ensure functionality."
-  },
-  {
-    "building_name": "Shasta Hall",
-    "address": "565 Oxford Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Shasta Hall",
+      "address": "565 Oxford Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 1,
+      "electricity": 468832.409,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.7636,
+      "latitude": 38.5474,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure proper functionality.\n- Implement a fire safety education program for residents."
     },
-    "num_fire_drills": 1,
-    "electricity": 468832.409,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.7636,
-    "latitude": 38.5474,
-    "fire_risk_score": 15,
-    "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure proper functionality.\n- Implement a fire safety education program for residents."
-  },
-  {
-    "building_name": "Tahoe Hall",
-    "address": "533 Oxford Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Tahoe Hall",
+      "address": "533 Oxford Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 1,
+      "electricity": 468832.409,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.76402,
+      "latitude": 38.54688,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure functionality.\n- Implement a fire safety education program for residents."
     },
-    "num_fire_drills": 1,
-    "electricity": 468832.409,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.76402,
-    "latitude": 38.54688,
-    "fire_risk_score": 15,
-    "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure functionality.\n- Implement a fire safety education program for residents."
-  },
-  {
-    "building_name": "Yosemite Hall",
-    "address": "541 Oxford Cr., Davis, CA",
-    "fire_safety": {
-      "sprinkler": {
-        "full": true,
-        "partial": false
+    {
+      "building_name": "Yosemite Hall",
+      "address": "541 Oxford Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
       },
-      "alarm": {
-        "smoke": true,
-        "duct": true,
-        "manual_pull": true,
-        "evac_device": true
-      },
-      "fire_separation": {
-        "corridor": true,
-        "room": true
-      }
+      "num_fire_drills": 1,
+      "electricity": 468832.409,
+      "steam": null,
+      "chilled_water": null,
+      "domestic_water": null,
+      "longitude": -121.7633,
+      "latitude": 38.5469,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Provide fire safety education and training to residents."
     },
-    "num_fire_drills": 1,
-    "electricity": 468832.409,
-    "steam": null,
-    "chilled_water": null,
-    "domestic_water": null,
-    "longitude": -121.7633,
-    "latitude": 38.5469,
-    "fire_risk_score": 15,
-    "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Provide fire safety education and training to residents."
-  }
-]
+    {
+      "building_name": "Alder",
+      "address": "1081 La Rue Rd., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 287330.509,
+      "steam": null,
+      "chilled_water": 299.222,
+      "domestic_water": null,
+      "longitude": -121.75835,
+      "latitude": 38.5460,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure proper functionality.\n- Update the evacuation plan with clear routes and assembly points."
+    },
+    {
+      "building_name": "Bixby",
+      "address": "1019 La Rue Rd., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 287330.509,
+      "steam": null,
+      "chilled_water": 299.222,
+      "domestic_water": null,
+      "longitude": -121.75745,
+      "latitude": 38.5445,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Implement a comprehensive fire safety education program for residents."
+    },
+    {
+      "building_name": "Campo",
+      "address": "605 Regan Hall Bkwy., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": false
+        },
+        "fire_separation": {
+          "corridor": false,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 118198.604,
+      "steam": 252825.290,
+      "chilled_water": 0,
+      "domestic_water": null,
+      "longitude": -121.75675,
+      "latitude": 38.54425,
+      "fire_risk_score": 30,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Install evacuation devices to improve emergency response capabilities.\n- Implement corridor fire separation to enhance overall building safety.\n- Conduct regular inspections of all fire safety equipment."
+    },
+    {
+      "building_name": "Gilmore",
+      "address": "1029 La Rue Rd., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 287330.509,
+      "steam": null,
+      "chilled_water": 299.222,
+      "domestic_water": null,
+      "longitude": -121.7588,
+      "latitude": 38.5446,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Provide comprehensive fire safety training for residents and staff."
+    },
+    {
+      "building_name": "Indio",
+      "address": "505 Regan Hall Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": false
+        },
+        "fire_separation": {
+          "corridor": false,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 118198.604,
+      "steam": 252825.290,
+      "chilled_water": 0,
+      "domestic_water": null,
+      "longitude": -121.75495,
+      "latitude": 38.5442,
+      "fire_risk_score": 30,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Install evacuation devices to improve emergency response capabilities.\n- Implement corridor fire separation to enhance overall building safety.\n- Regularly test and maintain all fire safety equipment."
+    },
+    {
+      "building_name": "Malcolm",
+      "address": "1059 La Rue Rd., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 287330.509,
+      "steam": null,
+      "chilled_water": 299.222,
+      "domestic_water": null,
+      "longitude": -121.75745,
+      "latitude": 38.54555,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment.\n- Update the fire safety plan with clear procedures for various emergency scenarios."
+    },
+    {
+      "building_name": "Miller",
+      "address": "1079 La Rue Rd., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 287330.509,
+      "steam": null,
+      "chilled_water": 299.222,
+      "domestic_water": null,
+      "longitude": -121.7572,
+      "latitude": 38.5459,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Implement a comprehensive fire safety education program for all residents."
+    },
+    {
+      "building_name": "Nova",
+      "address": "555 Beckett Hall Cr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": false
+        },
+        "fire_separation": {
+          "corridor": false,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 118198.604,
+      "steam": 252825.290,
+      "chilled_water": 0,
+      "domestic_water": null,
+      "longitude": -121.7559,
+      "latitude": 38.5444,
+      "fire_risk_score": 30,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Install evacuation devices to improve emergency response capabilities.\n- Implement corridor fire separation to enhance overall building safety.\n- Conduct regular inspections of all fire safety equipment."
+    },
+    {
+      "building_name": "Tercero -Campbell",
+      "address": "434 Dairy Rd., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 146474.306,
+      "steam": 165008.654,
+      "chilled_water": 7.740,
+      "domestic_water": null,
+      "longitude": -121.7584,
+      "latitude": 38.5352,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment to ensure proper functionality.\n- Provide comprehensive fire safety education to all residents."
+    },
+    {
+      "building_name": "Tercero - Cottonwood",
+      "address": "337 Bioletti Way, Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 171188.088,
+      "steam": 160569.609,
+      "chilled_water": 95.227,
+      "domestic_water": null,
+      "longitude": -121.7564,
+      "latitude": 38.5359,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Ensure all fire safety equipment is regularly inspected and maintained.\n- Update evacuation plans and ensure all residents are familiar with emergency procedures."
+    },
+    {
+      "building_name": "Tercero - Currant",
+      "address": "584 Tercero Hall Dr., Davis, CA",
+      "fire_safety": {
+        "sprinkler": {
+          "full": true,
+          "partial": false
+        },
+        "alarm": {
+          "smoke": true,
+          "duct": true,
+          "manual_pull": true,
+          "evac_device": true
+        },
+        "fire_separation": {
+          "corridor": true,
+          "room": true
+        }
+      },
+      "num_fire_drills": 1,
+      "electricity": 205831.680,
+      "steam": 59192.335,
+      "chilled_water": 107019.244,
+      "domestic_water": null,
+      "longitude": -121.7565,
+      "latitude": 38.5373,
+      "fire_risk_score": 15,
+      "action_steps": "- Increase the number of fire drills per year to at least 2.\n- Conduct regular inspections of all fire safety equipment.\n- Provide comprehensive fire safety training for all residents and staff."
+    }
+  ]
