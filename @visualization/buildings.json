@@ -1,0 +1,146 @@
+[
+  {
+    "building_name": "Tercero Residence Halls",
+    "fire_risk_score": 72,
+    "address": "Tercero Residence Halls, Davis, CA 95616",
+    "latitude": 38.5362,
+    "longitude": -121.7656,
+    "building_type": "Residential",
+    "fire_safety": {
+      "sprinkler": {"full": false, "partial": true},
+      "alarm": {
+        "smoke": true,
+        "duct": false,
+        "manual_pull": true,
+        "evac_device": false
+      },
+      "fire_separation": {"corridor": true, "room": false}
+    },
+    "num_fire_drills": 1,
+    "electricity": 620000,
+    "steam": 1200,
+    "chilled_water": 800,
+    "domestic_water": 950,
+    "action_steps": "Install complete fire sprinkler system\nIncrease fire drill frequency\nImplement proper fire separation barriers"
+  },
+  {
+    "building_name": "Segundo Residence Halls",
+    "fire_risk_score": 65,
+    "address": "Segundo Residence Halls, Davis, CA 95616",
+    "latitude": 38.5396,
+    "longitude": -121.7587,
+    "building_type": "Residential",
+    "fire_safety": {
+      "sprinkler": {"full": true, "partial": false},
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": false
+      },
+      "fire_separation": {"corridor": true, "room": true}
+    },
+    "num_fire_drills": 2,
+    "electricity": 580000,
+    "steam": 1100,
+    "chilled_water": 700,
+    "domestic_water": 900,
+    "action_steps": "Install evacuation devices\nSchedule comprehensive fire safety assessment"
+  },
+  {
+    "building_name": "Sciences Laboratory Building",
+    "fire_risk_score": 45,
+    "address": "Sciences Laboratory Building, Davis, CA 95616",
+    "latitude": 38.5376,
+    "longitude": -121.7499,
+    "building_type": "Academic",
+    "fire_safety": {
+      "sprinkler": {"full": true, "partial": false},
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {"corridor": true, "room": true}
+    },
+    "num_fire_drills": 2,
+    "electricity": 480000,
+    "steam": 900,
+    "chilled_water": 600,
+    "domestic_water": 750,
+    "action_steps": "Schedule regular electrical system inspections\nConduct annual fire safety training"
+  },
+  {
+    "building_name": "Memorial Union",
+    "fire_risk_score": 31,
+    "address": "Memorial Union, Davis, CA 95616",
+    "latitude": 38.5421,
+    "longitude": -121.7490,
+    "building_type": "Administrative",
+    "fire_safety": {
+      "sprinkler": {"full": true, "partial": false},
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {"corridor": true, "room": true}
+    },
+    "num_fire_drills": 2,
+    "electricity": 320000,
+    "steam": 600,
+    "chilled_water": 400,
+    "domestic_water": 500,
+    "action_steps": "Maintain current fire safety standards\nContinue regular inspections"
+  },
+  {
+    "building_name": "Shields Library",
+    "fire_risk_score": 28,
+    "address": "Shields Library, Davis, CA 95616",
+    "latitude": 38.5404,
+    "longitude": -121.7490,
+    "building_type": "Academic",
+    "fire_safety": {
+      "sprinkler": {"full": true, "partial": false},
+      "alarm": {
+        "smoke": true,
+        "duct": true,
+        "manual_pull": true,
+        "evac_device": true
+      },
+      "fire_separation": {"corridor": true, "room": true}
+    },
+    "num_fire_drills": 2,
+    "electricity": 290000,
+    "steam": 550,
+    "chilled_water": 380,
+    "domestic_water": 450,
+    "action_steps": "Maintain current fire safety standards\nContinue regular inspections"
+  },
+  {
+    "building_name": "Meyer Hall",
+    "fire_risk_score": 52,
+    "address": "Meyer Hall, Davis, CA 95616",
+    "latitude": 38.5342,
+    "longitude": -121.7575,
+    "building_type": "Research",
+    "fire_safety": {
+      "sprinkler": {"full": false, "partial": true},
+      "alarm": {
+        "smoke": true,
+        "duct": false,
+        "manual_pull": true,
+        "evac_device": false
+      },
+      "fire_separation": {"corridor": true, "room": false}
+    },
+    "num_fire_drills": 1,
+    "electricity": 510000,
+    "steam": 950,
+    "chilled_water": 650,
+    "domestic_water": 800,
+    "action_steps": "Upgrade partial sprinkler coverage to full building coverage\nInstall missing fire safety components"
+  }
+]
